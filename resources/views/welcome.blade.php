@@ -43,8 +43,10 @@
         <!-- Product Categories -->
         <div class="row mt-5 justify-content-center">
             <div class="col-md-2 text-center mb-3">
-                <img src="https://via.placeholder.com/300x300?text=Scarves" class="img-fluid rounded-circle mb-2"
+                <a href="{{ route('cart') }}">
+                    <img src="https://via.placeholder.com/300x300?text=Scarves" class="img-fluid rounded-circle mb-2"
                     alt="Scarves">
+                </a>
                 <h4>Scarves</h4>
             </div>
             <div class="col-md-2 text-center mb-3">
