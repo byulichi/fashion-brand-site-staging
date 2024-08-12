@@ -1,6 +1,6 @@
 <!-- Header -->
-<header class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
+<header class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+    <div class="container-fluid my-2">
         <a class="navbar-brand" href="{{ url('/') }}">
             <img src="#" height="40" alt="Brand Logo">
         </a>
