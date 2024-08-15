@@ -94,7 +94,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Subtotal: (ex. Shipping)</h5>
-                        <p class="card-text">RM 159.00</p>
+                        <p class="card-text">RM 407.00</p>
                         <p class="card-text">You can choose your shipping option later in the checkout.</p>
                         <a href="#" class="btn btn-dark w-100 mb-2">LOGIN TO CHECKOUT</a>
                         <a href="#" class="btn btn-outline-dark w-100">GUEST CHECKOUT</a>

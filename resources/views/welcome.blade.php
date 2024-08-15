@@ -1,3 +1,4 @@
+<x-app-layout>
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
@@ -10,7 +11,7 @@
 
 <body>
     <!-- Header -->
-    @include('layouts.navigation')
+    {{-- @include('layouts.navigation') --}}
 
     <!-- Main Content -->
     <main class="container-fluid">
@@ -186,3 +187,4 @@
 </body>
 
 </html>
+</x-app-layout>
