@@ -35,18 +35,18 @@
 
         <!-- Product Grid -->
         <div class="row">
-            @for ($i = 0; $i < 12; $i++)
+            @foreach($items as $item)
             <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
                 <div class="card">
-                    <img src="https://via.placeholder.com/400x600" class="card-img-top img-fluid product-image hover-cursor" alt="Product Image" data-bs-toggle="modal" data-bs-target="#productModal">
+                    <img src="https://via.placeholder.com/400x600" class="card-img-top img-fluid product-image hover-cursor" alt="{{ $item->name }}" data-bs-toggle="modal" data-bs-target="#productModal">
                     <div class="card-body text-center">
-                        <h5 class="card-title">The Dreamscape Shawl In Dim Grey</h5>
-                        <p class="card-text">RM 159.00</p>
-                        {{-- <p class="text-muted">3 payments of RM 53.00 with <a href="#">atome</a></p> --}}
+                        <h5 class="card-title">{{ $item->name }}</h5>
+                        <p class="card-text">RM {{ number_format($item->price, 2) }}</p>
+                        {{-- <p class="text-muted">3 payments of RM {{ number_format($item->price / 3, 2) }} with <a href="#">atome</a></p> --}}
                     </div>
                 </div>
             </div>
-            @endfor
+            @endforeach
         </div>
     </div>
 
