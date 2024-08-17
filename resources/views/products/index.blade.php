@@ -6,12 +6,22 @@
                 <div class="mb-4">
                     <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="sortDropdown"
                         data-bs-toggle="dropdown" aria-expanded="false">
-                        Sort By: Latest
+                        Sort By:
+                        @if (request('sort') == 'price_asc')
+                            Price: Low to High
+                        @elseif(request('sort') == 'price_desc')
+                            Price: High to Low
+                        @else
+                            Latest
+                        @endif
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="sortDropdown">
-                        <li><a class="dropdown-item" href="#">Latest</a></li>
-                        <li><a class="dropdown-item" href="#">Price: Low to High</a></li>
-                        <li><a class="dropdown-item" href="#">Price: High to Low</a></li>
+                        <li><a class="dropdown-item" href="{{ route('products', ['sort' => 'latest']) }}">Latest</a>
+                        </li>
+                        <li><a class="dropdown-item" href="{{ route('products', ['sort' => 'price_asc']) }}">Price: Low
+                                to High</a></li>
+                        <li><a class="dropdown-item" href="{{ route('products', ['sort' => 'price_desc']) }}">Price:
+                                High to Low</a></li>
                     </ul>
                 </div>
             </div>
