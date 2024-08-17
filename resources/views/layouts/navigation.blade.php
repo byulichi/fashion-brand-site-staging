@@ -125,6 +125,9 @@
                             <a class="nav-link">Hi, {{ Auth::check() ? Auth::user()->name : null }}</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="{{ route("cart") }}">My Cart</a>
+                        </li>
+                        <li class="nav-item">
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
                                 <button type="submit" class="nav-link btn btn-link">Logout</button>

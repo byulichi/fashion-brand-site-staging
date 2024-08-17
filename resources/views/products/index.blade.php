@@ -35,38 +35,57 @@
 
         <!-- Product Grid -->
         <div class="row">
-            @foreach($items as $item)
-            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-                <div class="card">
-                    <img src="https://via.placeholder.com/400x600" class="card-img-top img-fluid product-image hover-cursor" alt="{{ $item->name }}" data-bs-toggle="modal" data-bs-target="#productModal{{ $item->id }}">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">{{ $item->name }}</h5>
-                        <p class="card-text">RM {{ number_format($item->price, 2) }}</p>
+            @foreach ($items as $item)
+                <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                    <div class="card">
+                        <img src="https://via.placeholder.com/400x600"
+                            class="card-img-top img-fluid product-image hover-cursor" alt="{{ $item->name }}"
+                            data-bs-toggle="modal" data-bs-target="#productModal{{ $item->id }}">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">{{ $item->name }}</h5>
+                            <p class="card-text">RM {{ number_format($item->price, 2) }}</p>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Add to cart Modal -->
-            <div class="modal fade" id="productModal{{ $item->id }}" tabindex="-1" aria-labelledby="productModalLabel{{ $item->id }}" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="productModalLabel{{ $item->id }}">Add to Cart</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            Do you want to add <strong>{{ $item->name }}</strong> to your cart?
-                        </div>
-                        <div class="modal-footer">
-                            <form method="POST" action="{{ route('cart.add', $item->id) }}">
-                                @csrf
-                                <button type="submit" class="btn btn-primary">Add to Cart</button>
-                            </form>
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <!-- Add to cart Modal -->
+                <div class="modal fade" id="productModal{{ $item->id }}" tabindex="-1"
+                    aria-labelledby="productModalLabel{{ $item->id }}" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="productModalLabel{{ $item->id }}">Add to Cart</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                Do you want to add <strong>{{ $item->name }}</strong> to your cart?
+                            </div>
+                            <div class="modal-footer">
+                                <div class="btn-group">
+                                    <form method="POST" action="{{ route('cart.add', $item->id) }}">
+                                        @csrf
+                                        <button type="button" class="btn btn-primary dropdown-toggle"
+                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                            Add to Cart
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <button type="submit" name="action" value="checkout"
+                                                    class="dropdown-item">Checkout</button>
+                                            </li>
+                                            <li>
+                                                <button type="submit" name="action" value="continue"
+                                                    class="dropdown-item">Continue Shopping</button>
+                                            </li>
+                                        </ul>
+                                    </form>
+                                </div>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
             @endforeach
         </div>
     </div>

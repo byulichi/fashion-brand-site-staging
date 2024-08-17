@@ -17,12 +17,24 @@ class CartController extends Controller
         $cart->quantity = 1;
         $cart->save();
 
-        return redirect()->route('cart');
+        // Store product info in session
+        $item = Item::find($itemId);
+        $request->session()->flash('item_added', [
+            'name' => $item->name,
+            'price' => number_format($item->price, 2),
+            'image' => 'https://via.placeholder.com/400x600', // Replace with actual image path
+        ]);
+
+        if ($request->input('action') === 'checkout') {
+            return redirect()->route('cart');
+        } else {
+            return redirect()->route('products');
+        }
     }
 
     public function index()
     {
-        $cartItems = Auth::user()->cart()->with('item')->get(); // Get user's item
+        $cartItems = Auth::user()->cart()->with('item')->get();
         return view('products.shoppingcart', compact('cartItems'));
     }
 
@@ -48,5 +60,4 @@ class CartController extends Controller
 
         return redirect()->route('cart')->with('success', 'Item removed from cart.');
     }
-
 }
