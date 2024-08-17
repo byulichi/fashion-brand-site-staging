@@ -38,35 +38,36 @@
             @foreach($items as $item)
             <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
                 <div class="card">
-                    <img src="https://via.placeholder.com/400x600" class="card-img-top img-fluid product-image hover-cursor" alt="{{ $item->name }}" data-bs-toggle="modal" data-bs-target="#productModal">
+                    <img src="https://via.placeholder.com/400x600" class="card-img-top img-fluid product-image hover-cursor" alt="{{ $item->name }}" data-bs-toggle="modal" data-bs-target="#productModal{{ $item->id }}">
                     <div class="card-body text-center">
                         <h5 class="card-title">{{ $item->name }}</h5>
                         <p class="card-text">RM {{ number_format($item->price, 2) }}</p>
-                        {{-- <p class="text-muted">3 payments of RM {{ number_format($item->price / 3, 2) }} with <a href="#">atome</a></p> --}}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add to cart Modal -->
+            <div class="modal fade" id="productModal{{ $item->id }}" tabindex="-1" aria-labelledby="productModalLabel{{ $item->id }}" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="productModalLabel{{ $item->id }}">Add to Cart</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            Do you want to add <strong>{{ $item->name }}</strong> to your cart?
+                        </div>
+                        <div class="modal-footer">
+                            <form method="POST" action="{{ route('cart.add', $item->id) }}">
+                                @csrf
+                                <button type="submit" class="btn btn-primary">Add to Cart</button>
+                            </form>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        </div>
                     </div>
                 </div>
             </div>
             @endforeach
-        </div>
-    </div>
-
-    <!-- Add to cart Modal -->
-    <div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="productModalLabel">Add to Cart</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    Do you want to add this product to your cart?
-                </div>
-                <div class="modal-footer">
-                    <a href="{{ route('cart') }}" class="btn btn-primary">Add to Cart</a>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-
-                </div>
-            </div>
         </div>
     </div>
 

@@ -7,6 +7,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::post('/logout', function () {
+    Auth::logout();
+    return redirect('/');
+})->name('logout');
+
 Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
@@ -17,15 +22,12 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [App\Http\Controllers\ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::post('/logout', function () {
-    Auth::logout();
-    return redirect('/');
-})->name('logout');
-
 Route::get('/products', [App\Http\Controllers\ProductController::class, 'index'])->name('products');
 
-Route::get('/cart', function () {
-    return view('shoppingcart');
-})->name('cart');
+// Cart
+Route::get('/cart', [App\Http\Controllers\CartController::class, 'index'])->name('cart');
+Route::post('/cart/add/{id}', [App\Http\Controllers\CartController::class, 'add'])->name('cart.add');
+Route::post('/cart/update/{itemId}', [App\Http\Controllers\CartController::class, 'update'])->name('cart.update');
+Route::delete('/cart/remove/{itemId}', [App\Http\Controllers\CartController::class, 'remove'])->name('cart.remove');
 
 require __DIR__.'/auth.php';
