@@ -9,15 +9,40 @@ use App\Models\Item;
 
 class CartController extends Controller
 {
+    public function index()
+    {
+        $cartItems = Auth::check() ? Auth::user()->cart()->with('item')->get() : collect(session()->get('cart', []));
+
+        return view('products.shoppingcart', compact('cartItems'));
+    }
+
     public function add(Request $request, $itemId)
     {
-        $cart = new Cart();
-        $cart->user_id = Auth::id();
-        $cart->item_id = $itemId;
-        $cart->quantity = 1;
-        $cart->save();
+        if (Auth::check()) {
+            $cart = new Cart();
+            $cart->user_id = Auth::id();
+            $cart->item_id = $itemId;
+            $cart->quantity = 1;
+            $cart->save();
+        } else {
+            // Handle cart for guest users
+            $cart = session()->get('cart', []);
 
-        // Store product info in session
+            if (isset($cart[$itemId])) {
+                $cart[$itemId]['quantity']++;
+            } else {
+                $item = Item::find($itemId);
+                $cart[$itemId] = [
+                    'name' => $item->name,
+                    'price' => $item->price,
+                    'quantity' => 1,
+                    'image' => 'https://via.placeholder.com/400x600', // Replace with actual image path
+                ];
+            }
+
+            session()->put('cart', $cart);
+        }
+
         $item = Item::find($itemId);
         $request->session()->flash('item_added', [
             'name' => $item->name,
@@ -32,31 +57,42 @@ class CartController extends Controller
         }
     }
 
-    public function index()
-    {
-        $cartItems = Auth::user()->cart()->with('item')->get();
-        return view('products.shoppingcart', compact('cartItems'));
-    }
-
     public function update($itemId, Request $request)
     {
-        $cartItem = Cart::findOrFail($itemId);
-        $quantity = $request->input('quantity', 1);
+        if (Auth::check()) {
+            // Authenticated user
+            $cartItem = Cart::where('user_id', Auth::id())->where('item_id', $itemId)->firstOrFail();
+            $quantity = $request->input('quantity', 1);
 
-        if ($quantity < 1) {
-            $quantity = 1;
+            $cartItem->quantity = max(1, $quantity);
+            $cartItem->save();
+        } else {
+            // Guest user
+            $cart = session()->get('cart', []);
+            if (isset($cart[$itemId])) {
+                $quantity = max(1, $request->input('quantity', 1));
+                $cart[$itemId]['quantity'] = $quantity;
+                session()->put('cart', $cart);
+            }
         }
-
-        $cartItem->quantity = $quantity;
-        $cartItem->save();
 
         return redirect()->route('cart')->with('success', 'Cart updated successfully.');
     }
 
     public function remove($itemId)
     {
-        $cartItem = Cart::findOrFail($itemId);
-        $cartItem->delete();
+        if (Auth::check()) {
+            // Authenticated user
+            $cartItem = Cart::where('user_id', Auth::id())->where('item_id', $itemId)->firstOrFail();
+            $cartItem->delete();
+        } else {
+            // Guest user
+            $cart = session()->get('cart', []);
+            if (isset($cart[$itemId])) {
+                unset($cart[$itemId]);
+                session()->put('cart', $cart);
+            }
+        }
 
         return redirect()->route('cart')->with('success', 'Item removed from cart.');
     }

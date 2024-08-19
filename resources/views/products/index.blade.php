@@ -25,22 +25,6 @@
                     </ul>
                 </div>
             </div>
-            {{-- <div class="col-md-9">
-            <div class="row">
-                <div class="col-md-3">
-                    <button class="btn btn-outline-secondary w-100">Search by Categories</button>
-                </div>
-                <div class="col-md-3">
-                    <button class="btn btn-outline-secondary w-100">Price</button>
-                </div>
-                <div class="col-md-3">
-                    <button class="btn btn-outline-secondary w-100">Color</button>
-                </div>
-                <div class="col-md-3">
-                    <button class="btn btn-outline-secondary w-100">Size</button>
-                </div>
-            </div>
-        </div> --}}
         </div>
 
         <!-- Product Grid -->
