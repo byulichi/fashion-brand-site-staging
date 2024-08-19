@@ -25,9 +25,7 @@ class CartController extends Controller
             $cart->quantity = 1;
             $cart->save();
         } else {
-            // Handle cart for guest users
             $cart = session()->get('cart', []);
-
             if (isset($cart[$itemId])) {
                 $cart[$itemId]['quantity']++;
             } else {
@@ -36,10 +34,9 @@ class CartController extends Controller
                     'name' => $item->name,
                     'price' => $item->price,
                     'quantity' => 1,
-                    'image' => 'https://via.placeholder.com/400x600', // Replace with actual image path
+                    'image' => 'https://via.placeholder.com/400x600',
                 ];
             }
-
             session()->put('cart', $cart);
         }
 
@@ -47,27 +44,24 @@ class CartController extends Controller
         $request->session()->flash('item_added', [
             'name' => $item->name,
             'price' => number_format($item->price, 2),
-            'image' => 'https://via.placeholder.com/400x600', // Replace with actual image path
+            'image' => 'https://via.placeholder.com/400x600',
         ]);
 
         if ($request->input('action') === 'checkout') {
             return redirect()->route('cart');
         } else {
-            return redirect()->route('products');
+            return redirect()->route('products', array_merge($request->only(['sort', 'type'])));
         }
     }
 
     public function update($itemId, Request $request)
     {
         if (Auth::check()) {
-            // Authenticated user
-            $cartItem = Cart::where('user_id', Auth::id())->where('item_id', $itemId)->firstOrFail();
+            $cartItem = Cart::where('user_id', Auth::id())->where('id', $itemId)->firstOrFail();
             $quantity = $request->input('quantity', 1);
-
             $cartItem->quantity = max(1, $quantity);
             $cartItem->save();
         } else {
-            // Guest user
             $cart = session()->get('cart', []);
             if (isset($cart[$itemId])) {
                 $quantity = max(1, $request->input('quantity', 1));
@@ -76,17 +70,17 @@ class CartController extends Controller
             }
         }
 
-        return redirect()->route('cart')->with('success', 'Cart updated successfully.');
+        return redirect()
+            ->route('cart', $request->only(['sort', 'type']))
+            ->with('success', 'Cart updated successfully.');
     }
 
-    public function remove($itemId)
+    public function remove($itemId, Request $request)
     {
         if (Auth::check()) {
-            // Authenticated user
-            $cartItem = Cart::where('user_id', Auth::id())->where('item_id', $itemId)->firstOrFail();
+            $cartItem = Cart::where('user_id', Auth::id())->where('id', $itemId)->firstOrFail();
             $cartItem->delete();
         } else {
-            // Guest user
             $cart = session()->get('cart', []);
             if (isset($cart[$itemId])) {
                 unset($cart[$itemId]);
@@ -94,6 +88,8 @@ class CartController extends Controller
             }
         }
 
-        return redirect()->route('cart')->with('success', 'Item removed from cart.');
+        return redirect()
+            ->route('cart', $request->only(['sort', 'type']))
+            ->with('success', 'Item removed from cart.');
     }
 }

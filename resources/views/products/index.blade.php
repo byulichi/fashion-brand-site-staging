@@ -16,12 +16,17 @@
                         @endif
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="sortDropdown">
-                        <li><a class="dropdown-item" href="{{ route('products', ['sort' => 'latest']) }}">Latest</a>
+                        <li><a class="dropdown-item"
+                                href="{{ route('products', array_merge(request()->only(['type']), ['sort' => 'latest'])) }}">Latest</a>
                         </li>
-                        <li><a class="dropdown-item" href="{{ route('products', ['sort' => 'price_asc']) }}">Price: Low
-                                to High</a></li>
-                        <li><a class="dropdown-item" href="{{ route('products', ['sort' => 'price_desc']) }}">Price:
+
+                        <li><a class="dropdown-item"
+                                href="{{ route('products', array_merge(request()->only(['type']), ['sort' => 'price_asc'])) }}">Price:
+                                Low to High</a></li>
+                        <li><a class="dropdown-item"
+                                href="{{ route('products', array_merge(request()->only(['type']), ['sort' => 'price_desc'])) }}">Price:
                                 High to Low</a></li>
+
                     </ul>
                 </div>
             </div>
@@ -60,6 +65,9 @@
                                 <div class="btn-group">
                                     <form method="POST" action="{{ route('cart.add', $item->id) }}">
                                         @csrf
+                                        <input type="hidden" name="sort" value="{{ request('sort') }}">
+                                        <input type="hidden" name="type" value="{{ request('type') }}">
+
                                         <button type="button" class="btn btn-primary dropdown-toggle"
                                             data-bs-toggle="dropdown" aria-expanded="false">
                                             Add to Cart
