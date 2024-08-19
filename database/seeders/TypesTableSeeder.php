@@ -14,9 +14,11 @@ class TypesTableSeeder extends Seeder
     public function run(): void
     {
         DB::table('types')->insert([
-            ['name' => 'Shawls'],
-            ['name' => 'Scarves'],
-            ['name' => 'Accessories'],
+        ['name' => 'Scarves'],
+        ['name' => 'Ready to Wear'],
+        ['name' => 'Bags'],
+        ['name' => 'Shoes'],
+        ['name' => 'Accessories'],
         ]);
     }
 }
