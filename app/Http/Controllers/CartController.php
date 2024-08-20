@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Cart;
 use App\Models\Item;
+use Stripe\Stripe;
+use Stripe\Charge;
+use Stripe\Customer;
 
 class CartController extends Controller
 {
@@ -91,11 +94,5 @@ class CartController extends Controller
         return redirect()
             ->route('cart', $request->only(['sort', 'type']))
             ->with('success', 'Item removed from cart.');
-    }
-
-    public function checkout()
-    {
-        $stripeSecretKey = '';
-        \Stripe\Stripe::setApiKey($stripeSecretKey);
     }
 }

@@ -30,4 +30,7 @@ Route::post('/cart/add/{id}', [App\Http\Controllers\CartController::class, 'add'
 Route::post('/cart/update/{itemId}', [App\Http\Controllers\CartController::class, 'update'])->name('cart.update');
 Route::delete('/cart/remove/{itemId}', [App\Http\Controllers\CartController::class, 'remove'])->name('cart.remove');
 
+Route::get('/checkout', [App\Http\Controllers\CheckoutController::class, 'index'])->name('checkout.index');
+Route::post('/checkout', [App\Http\Controllers\CheckoutController::class, 'processCheckout'])->name('checkout.process');
+
 require __DIR__.'/auth.php';
