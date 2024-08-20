@@ -92,4 +92,10 @@ class CartController extends Controller
             ->route('cart', $request->only(['sort', 'type']))
             ->with('success', 'Item removed from cart.');
     }
+
+    public function checkout()
+    {
+        $stripeSecretKey = '';
+        \Stripe\Stripe::setApiKey($stripeSecretKey);
+    }
 }
