@@ -1,60 +1,40 @@
 <x-app-layout>
-    <div class="container mt-5">
-        <h1 class="mb-4">Checkout</h1>
+    <div class="row mt-5">
+        <div class="col-12 col-md-6 offset-md-3">
+            <p>Hey there, I'm a Stripe Payment Page.</p>
 
-        <form action="{{ route('checkout.process') }}" method="POST" id="payment-form">
-            @csrf
-            <div class="form-group">
-                <label for="email">Email Address</label>
-                <input type="email" id="email" name="email" class="form-control" required>
-            </div>
-            <div class="form-group">
-                <label for="card-element">Credit or debit card</label>
-                <div id="card-element">
-                    <!-- A Stripe Element will be inserted here. -->
-                </div>
-                <!-- Used to display form errors. -->
-                <div id="card-errors" role="alert"></div>
-            </div>
-            <button type="submit" class="btn btn-primary mt-3">Submit Payment</button>
-        </form>
+            <p>Click the button below and you'll be taken to a <a href="https://stripe.com/en-gb-us" target="_blank">stripe</a>
+                checkout form where you can enter real credit / debit card details and send me money.</p>
 
-        <script src="https://js.stripe.com/v3/"></script>
-        <script>
-            var stripe = Stripe('{{ env("STRIPE_KEY") }}');
-            var elements = stripe.elements();
-            var card = elements.create('card');
-            card.mount('#card-element');
+            <p>My purpose is to demonstrate building a <a href="https://laravel.com/docs/9.x/"
+                                                          target="_blank">Laravel</a> / <a
+                    href="https://stripe.com/en-gb-us" target="_blank">Stripe</a> app in 5 minutes.</p>
 
-            card.on('change', function(event) {
-                var displayError = document.getElementById('card-errors');
-                if (event.error) {
-                    displayError.textContent = event.error.message;
-                } else {
-                    displayError.textContent = '';
-                }
-            });
+            <p>You can check my source code <a href="https://www.rossedlin.com/portfolio/stripe-laravel/code" target="_blank">here</a>.
+            </p>
 
-            var form = document.getElementById('payment-form');
-            form.addEventListener('submit', function(event) {
-                event.preventDefault();
-                stripe.createToken(card).then(function(result) {
-                    if (result.error) {
-                        var errorElement = document.getElementById('card-errors');
-                        errorElement.textContent = result.error.message;
-                    } else {
-                        var hiddenInput = document.createElement('input');
-                        hiddenInput.setAttribute('type', 'hidden');
-                        hiddenInput.setAttribute('name', 'stripeToken');
-                        hiddenInput.setAttribute('value', result.token.id);
-                        form.appendChild(hiddenInput);
-                        form.submit();
-                    }
-                });
-            });
-        </script>
-        <style>
+            <p class="text-danger">
+                WARNING!!!<br/>
+                This is set to LIVE mode, so real money is used.<br/>
+                No refunds, use at your own risk.
+            </p>
+        </div>
+    </div>
 
-        </style>
+    <div class="row mt-5 mb-5">
+        <div class="col-4"></div>
+        <div class="col-2">
+            <form action="/test" method="POST">
+                <input type="hidden" name="_token" value="{{csrf_token()}}">
+                <button type="submit" id="checkout-test-button" class="btn btn-primary">Checkout (Test)</button>
+            </form>
+        </div>
+        <div class="col-2">
+            <form action="/live" method="POST">
+                <input type="hidden" name="_token" value="{{csrf_token()}}">
+                <button type="submit" id="checkout-live-button" class="btn btn-success">Checkout (LIVE)</button>
+            </form>
+        </div>
+        <div class="col-4"></div>
     </div>
 </x-app-layout>
