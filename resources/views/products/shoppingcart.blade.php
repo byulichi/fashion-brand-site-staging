@@ -66,8 +66,12 @@
                             return (is_array($cartItem) ? $cartItem['price'] : $cartItem->item->price) * (is_array($cartItem) ? $cartItem['quantity'] : $cartItem->quantity);
                         }), 2) }}</p>
                         <p class="card-text">You can choose your shipping option later in the checkout.</p>
-                        <a href="{{ route('checkout.index') }}" class="btn btn-dark w-100 mb-2">LOGIN TO CHECKOUT</a>
-                        <a href="{{ route('checkout.index') }}" class="btn btn-outline-dark w-100">GUEST CHECKOUT</a>
+                            <form action="{{ route('checkout') }}" method="POST">
+                                @csrf
+                                <button class="btn btn-dark w-100 mb-2">CHECKOUT</button>
+                            </form>
+                        {{-- <a href="{{ route('checkout.index') }}" class="btn btn-dark w-100 mb-2">LOGIN TO CHECKOUT</a> --}}
+                        <a href="{{ route('checkout') }}" class="btn btn-outline-dark w-100">GUEST CHECKOUT</a>
                     </div>
                 </div>
             </div>
