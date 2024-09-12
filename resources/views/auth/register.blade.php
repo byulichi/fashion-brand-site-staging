@@ -1,13 +1,13 @@
 <x-guest-layout>
     <!-- Header -->
-    @include('layouts.navigation')
+    @include("layouts.navigation")
     <div class="container d-flex align-items-center justify-content-center vh-100">
         <div class="row w-100">
 
             <!-- Registration Form -->
             <div class="col-md-6 mx-auto">
                 <h2 class="text-start">Create Account</h2>
-                <p class="text-muted text-start">Create your ○○ Online account to start shopping and get more
+                <p class="text-muted text-start">Create an online account to start shopping and get more
                     surprise!</p>
 
                 <form method="POST" action="{{ route('register') }}">

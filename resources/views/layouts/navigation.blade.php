@@ -87,12 +87,11 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="prayerwearDropdown" role="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
-                        Prayerwear
+                        Suit
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="prayerwearDropdown">
-                        <li><a class="dropdown-item" href="#">Item 1</a></li>
-                        <li><a class="dropdown-item" href="#">Item 2</a></li>
-                        <li><a class="dropdown-item" href="#">Item 3</a></li>
+                        <li><a class="dropdown-item" href="{{ route('products', ['type' => 'Leena Suit']) }}">Leena suit</a></li>
+                        <li><a class="dropdown-item" href="{{ route('products', ['type' => 'Tasneem Suit']) }}">Taneem suit</a></li>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">

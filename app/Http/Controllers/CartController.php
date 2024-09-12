@@ -35,10 +35,11 @@ class CartController extends Controller
             } else {
                 $item = Item::find($itemId);
                 $cart[$itemId] = [
+                    'type_id' => $item->type_id,
                     'name' => $item->name,
                     'price' => $item->price,
                     'quantity' => 1,
-                    'image' => 'https://via.placeholder.com/400x600',
+                    'photo' => $item->photo,
                 ];
             }
             session()->put('cart', $cart);
@@ -46,9 +47,10 @@ class CartController extends Controller
 
         $item = Item::find($itemId);
         $request->session()->flash('item_added', [
+            'type_id' => $item->type_id,
             'name' => $item->name,
             'price' => number_format($item->price, 2),
-            'image' => 'https://via.placeholder.com/400x600',
+            'photo' => $item->photo
         ]);
 
         if ($request->input('action') === 'checkout') {
@@ -106,6 +108,8 @@ class CartController extends Controller
         $lineItems = [];
         $totalPrice = 0;
         foreach ($cartItems as $cartItem) {
+            // is_array($cartItem) ? dd([asset($cartItem['photo'])]) : dd([asset($cartItem->photo)]); Only works in production(deployed), else it will pass   0 => "http://127.0.0.1:8000/images/○○/○○.JPG"
+
             $itemPrice = is_array($cartItem) ? $cartItem['price'] * 100 : $cartItem->item->price * 100;
             $quantity = is_array($cartItem) ? $cartItem['quantity'] : $cartItem->quantity;
             $totalPrice += $itemPrice * $quantity;
@@ -115,6 +119,7 @@ class CartController extends Controller
                     'currency' => 'myr',
                     'product_data' => [
                         'name' => is_array($cartItem) ? $cartItem['name'] : $cartItem->item->name,
+                        'images' => is_array($cartItem) ? [asset($cartItem['photo'])] : [asset($cartItem->photo)],
                     ],
                     'unit_amount' => is_array($cartItem) ? $cartItem['price'] * 100 : $cartItem->item->price * 100,
                 ],

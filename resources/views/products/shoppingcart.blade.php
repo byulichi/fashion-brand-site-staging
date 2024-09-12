@@ -22,12 +22,13 @@
                                             <tr>
                                                 <td>
                                                     <div class="d-flex">
-                                                        <img src="{{ is_array($cartItem) ? $cartItem['image'] : $cartItem->item->image }}"
+                                                        <img
+                                                        src="{{ is_array($cartItem) ? $cartItem['photo'] : asset($cartItem->item->photo) }}"
                                                             alt="Product Image" class="img-fluid me-3"
                                                             style="width: 80px; height: 115px; object-fit: cover;">
                                                         <div>
                                                             <h5 class="mb-1">{{ is_array($cartItem) ? $cartItem['name'] : $cartItem->item->name }}</h5>
-                                                            <p class="mb-0">SKU: {{ is_array($cartItem) ? $key : $cartItem->item->id }}</p>
+                                                            <p class="mb-0">{{ is_array($cartItem) ? App\Models\Type::find($cartItem['type_id'])->name : $cartItem->item->type->name }}</p>
                                                         </div>
                                                     </div>
                                                 </td>

@@ -37,7 +37,7 @@
             @foreach ($items as $item)
                 <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
                     <div class="card">
-                        <img src="https://via.placeholder.com/400x600"
+                        <img src= {{ $item->photo ? asset($item->photo) : "https://via.placeholder.com/400x600" }}
                             style="width: 304px; height: 456px; object-fit: cover;"
                             class="card-img-top img-fluid product-image hover-cursor" alt="{{ $item->name }}"
                             data-bs-toggle="modal" data-bs-target="#productModal{{ $item->id }}">

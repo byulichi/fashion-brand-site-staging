@@ -19,6 +19,8 @@ class TypesTableSeeder extends Seeder
         ['name' => 'Bags'],
         ['name' => 'Shoes'],
         ['name' => 'Accessories'],
+        ['name' => 'Leena Suit'],
+        ['name' => 'Tasneem Suit'],
         ]);
     }
 }

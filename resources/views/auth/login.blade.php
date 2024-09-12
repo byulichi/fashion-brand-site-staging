@@ -36,9 +36,9 @@
                 <button type="submit" class="btn btn-primary w-100 mb-3">{{ __('Log in') }}</button>
                 <div class="text-center">
                     <p>Don't have an account? <a href="{{ route('register') }}">{{ __('Create One') }}</a></p>
-                    <p>OR</p>
+                    {{-- <p>OR</p>
                     <button type="button" class="btn btn-outline-secondary w-100">GUEST CHECKOUT</button>
-                    <p class="mt-3"><small>○○ Online is secure and your personal details are protected.</small></p>
+                    <p class="mt-3"><small>Your personal details are protected.</small></p> --}}
                 </div>
             </form>
         </div>

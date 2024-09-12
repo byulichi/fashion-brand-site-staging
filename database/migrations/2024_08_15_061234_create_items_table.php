@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('type_id'); // Foreign key for the 'types' table
             $table->string('name');
+            $table->string('photo')->nullable();
             $table->float('price');
             $table->timestamps();
 
