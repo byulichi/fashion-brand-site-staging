@@ -32,5 +32,6 @@ Route::delete('/cart/remove/{itemId}', [App\Http\Controllers\CartController::cla
 Route::post('/checkout', [App\Http\Controllers\CartController::class, 'checkout'])->name('checkout');
 Route::get('/checkout/success', [App\Http\Controllers\CartController::class, 'success'])->name('checkout.success');
 Route::get('/checkout/cancel', [App\Http\Controllers\CartController::class, 'cancel'])->name('checkout.cancel');
+Route::post('/webhook', [App\Http\Controllers\CartController::class, 'webhook'])->name('checkout.webhook');
 
 require __DIR__.'/auth.php';

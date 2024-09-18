@@ -8,8 +8,8 @@ use App\Models\Cart;
 use App\Models\Item;
 use App\Models\Order;
 use Stripe\Stripe;
-use Stripe\Charge;
-use Stripe\Customer;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Illuminate\Support\Facades\Log;
 
 class CartController extends Controller
 {
@@ -50,7 +50,7 @@ class CartController extends Controller
             'type_id' => $item->type_id,
             'name' => $item->name,
             'price' => number_format($item->price, 2),
-            'photo' => $item->photo
+            'photo' => $item->photo,
         ]);
 
         if ($request->input('action') === 'checkout') {
@@ -101,7 +101,7 @@ class CartController extends Controller
 
     public function checkout()
     {
-        Stripe::setApiKey(env('STRIPE_SK'));
+        Stripe::setApiKey(apiKey: env('STRIPE_SECRET_KEY'));
         // \Stripe\Stripe::setApiKey(env('STRIPE_SK'));
 
         $cartItems = Auth::check() ? Auth::user()->cart()->with('item')->get() : collect(session()->get('cart', []));
@@ -130,7 +130,8 @@ class CartController extends Controller
         $session = \Stripe\Checkout\Session::create([
             'line_items' => $lineItems,
             'mode' => 'payment',
-            'success_url' => route('checkout.success', [], true),
+            // 'customer_email' => Auth::check() ? Auth::user()->email : null,
+            'success_url' => route('checkout.success', [], true) . '?session_id={CHECKOUT_SESSION_ID}',
             'cancel_url' => route('checkout.cancel', [], true),
         ]);
 
@@ -144,19 +145,101 @@ class CartController extends Controller
         return redirect($session->url);
     }
 
-    public function success()
+    public function success(Request $request)
     {
-        if (Auth::check()) {
-            Cart::where('user_id', Auth::id())->delete();
-        } else {
-            session()->forget('cart');
-        }
+        \Stripe\Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
+        $sessionId = $request->get('session_id');
 
-        return view('checkout.success')->with('success', 'Payment successful! Thank you for your purchase.');
+        // Log the start of the success function and session ID
+        Log::info('Stripe checkout success function started. Session ID: ' . $sessionId);
+
+        try {
+            // Retrieve the session
+            $session = \Stripe\Checkout\Session::retrieve($sessionId);
+            Log::info('Stripe session retrieved.', ['session' => $session]);
+
+            if (!$session) {
+                Log::error('Session not found.', ['session_id' => $sessionId]);
+                throw new NotFoundHttpException();
+            }
+
+            // Retrieve the customer
+            // $customer = \Stripe\Customer::retrieve($session->customer);
+            // Log::info('Customer retrieved.', ['customer' => $customer]);
+
+            // Retrieve the order by session ID
+            $order = Order::where('session_id', $session->id)->first();
+            if (!$order) {
+                Log::error('Order not found for session.', ['session_id' => $session->id]);
+                throw new NotFoundHttpException();
+            }
+
+            Log::info('Order retrieved.', ['order' => $order]);
+
+            // Update order status if unpaid
+            if ($order->status === 'unpaid') {
+                $order->status = 'paid';
+                $order->save();
+                Log::info('Order status updated to paid.', ['order_id' => $order->id]);
+            }
+
+            // Clear the cart
+            if (Auth::check()) {
+                Cart::where('user_id', Auth::id())->delete();
+                Log::info('Cart cleared for user.', ['user_id' => Auth::id()]);
+            } else {
+                session()->forget('cart');
+                Log::info('Session cart cleared.');
+            }
+
+            // Render success view
+            return view('checkout.success'/*, compact('customer')*/);
+        } catch (\Exception $e) {
+            Log::error('Error occurred in success function.', ['error' => $e->getMessage()]);
+            throw new NotFoundHttpException();
+        }
     }
 
     public function cancel()
     {
         return view('checkout.cancel')->withErrors(['error' => 'Payment was cancelled.']);
+    }
+
+    public function webhook()
+    {
+        $endpoint_secret = env('STRIPE_WEBHOOK_SECRET');
+
+        $payload = @file_get_contents('php://input');
+        $sig_header = $_SERVER['HTTP_STRIPE_SIGNATURE'];
+        $event = null;
+
+        try {
+            $event = \Stripe\Webhook::constructEvent($payload, $sig_header, $endpoint_secret);
+        } catch (\UnexpectedValueException $e) {
+            // Invalid payload
+            return response('', 400);
+        } catch (\Stripe\Exception\SignatureVerificationException $e) {
+            // Invalid signature
+            return response('', 400);
+        }
+
+        // Handle the event
+        switch ($event->type) {
+            case 'checkout.session.completed':
+                $session = $event->data->object;
+
+                $order = Order::where('session_id', $session->id)->first();
+                if ($order && $order->status === 'unpaid') {
+                    $order->status = 'paid';
+                    $order->save();
+                    // Send email to customer
+                }
+
+            // ... handle other event types
+            default:
+                echo 'Received unknown event type ' . $event->type;
+        }
+
+        return response('');
     }
 }
