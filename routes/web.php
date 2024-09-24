@@ -23,6 +23,7 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('/products', [App\Http\Controllers\ProductController::class, 'index'])->name('products');
+Route::get('/my-purchases', [App\Http\Controllers\OrderController::class, 'index'])->name('my-purchases');
 
 // Cart
 Route::get('/cart', [App\Http\Controllers\CartController::class, 'index'])->name('cart');

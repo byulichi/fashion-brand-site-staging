@@ -99,17 +99,16 @@ class CartController extends Controller
             ->with('success', 'Item removed from cart.');
     }
 
+    // STRIPE
     public function checkout()
     {
-        Stripe::setApiKey(apiKey: env('STRIPE_SECRET_KEY'));
-        // \Stripe\Stripe::setApiKey(env('STRIPE_SK'));
+        Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
 
         $cartItems = Auth::check() ? Auth::user()->cart()->with('item')->get() : collect(session()->get('cart', []));
         $lineItems = [];
         $totalPrice = 0;
-        foreach ($cartItems as $cartItem) {
-            // is_array($cartItem) ? dd([asset($cartItem['photo'])]) : dd([asset($cartItem->photo)]); Only works in production(deployed), else it will pass   0 => "http://127.0.0.1:8000/images/○○/○○.JPG"
 
+        foreach ($cartItems as $cartItem) {
             $itemPrice = is_array($cartItem) ? $cartItem['price'] * 100 : $cartItem->item->price * 100;
             $quantity = is_array($cartItem) ? $cartItem['quantity'] : $cartItem->quantity;
             $totalPrice += $itemPrice * $quantity;
@@ -121,26 +120,34 @@ class CartController extends Controller
                         'name' => is_array($cartItem) ? $cartItem['name'] : $cartItem->item->name,
                         'images' => is_array($cartItem) ? [asset($cartItem['photo'])] : [asset($cartItem->photo)],
                     ],
-                    'unit_amount' => is_array($cartItem) ? $cartItem['price'] * 100 : $cartItem->item->price * 100,
+                    'unit_amount' => $itemPrice,
                 ],
-                'quantity' => is_array($cartItem) ? $cartItem['quantity'] : $cartItem->quantity,
+                'quantity' => $quantity,
             ];
         }
 
         $session = \Stripe\Checkout\Session::create([
             'line_items' => $lineItems,
             'mode' => 'payment',
-            // 'customer_email' => Auth::check() ? Auth::user()->email : null,
             'success_url' => route('checkout.success', [], true) . '?session_id={CHECKOUT_SESSION_ID}',
             'cancel_url' => route('checkout.cancel', [], true),
         ]);
 
-        // Save session into orders table DB
-        $order = new Order();
-        $order->status = 0; // unpaid
-        $order->total_price = $totalPrice / 100; // Store price as a decimal (not in cents)
-        $order->session_id = $session->id;
-        $order->save();
+        $existingOrder = Order::where('user_id', Auth::id())->where('status', 'unpaid')->first();
+
+        if ($existingOrder) {
+            $existingOrder->session_id = $session->id;
+            $existingOrder->total_price = $totalPrice / 100;
+            $existingOrder->save();
+        } else {
+            // Create a new order if no unpaid order exists
+            Order::create([
+                'user_id' => Auth::id(),
+                'status' => 'unpaid',
+                'total_price' => $totalPrice / 100,
+                'session_id' => $session->id,
+            ]);
+        }
 
         return redirect($session->url);
     }
@@ -193,9 +200,10 @@ class CartController extends Controller
             }
 
             // Render success view
-            return view('checkout.success'/*, compact('customer')*/);
+            // return view('checkout.success'/*, compact('customer')*/);
+            return redirect()->route('my-purchases');
         } catch (\Exception $e) {
-            Log::error('Error occurred in success function.', ['error' => $e->getMessage()]);
+            Log::error('Error occurred in success function.', context: ['error' => $e->getMessage()]);
             throw new NotFoundHttpException();
         }
     }
