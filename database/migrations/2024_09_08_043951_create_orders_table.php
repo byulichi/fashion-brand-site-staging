@@ -16,6 +16,7 @@ return new class extends Migration {
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('status');
             $table->decimal('total_price', 6, 2);
+            $table->json('line_items');
             $table->string('session_id');
             $table->timestamps();
         });

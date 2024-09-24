@@ -35,6 +35,7 @@ class CartController extends Controller
             } else {
                 $item = Item::find($itemId);
                 $cart[$itemId] = [
+                    'id' => $itemId,
                     'type_id' => $item->type_id,
                     'name' => $item->name,
                     'price' => $item->price,
@@ -47,6 +48,7 @@ class CartController extends Controller
 
         $item = Item::find($itemId);
         $request->session()->flash('item_added', [
+            'id' => $itemId,
             'type_id' => $item->type_id,
             'name' => $item->name,
             'price' => number_format($item->price, 2),
@@ -106,6 +108,7 @@ class CartController extends Controller
 
         $cartItems = Auth::check() ? Auth::user()->cart()->with('item')->get() : collect(session()->get('cart', []));
         $lineItems = [];
+        $lineItemDetails = [];
         $totalPrice = 0;
 
         foreach ($cartItems as $cartItem) {
@@ -113,12 +116,17 @@ class CartController extends Controller
             $quantity = is_array($cartItem) ? $cartItem['quantity'] : $cartItem->quantity;
             $totalPrice += $itemPrice * $quantity;
 
+            $lineItemDetails[] = [
+                'id' => is_array($cartItem) ? $cartItem['id'] : $cartItem->item->id,
+                'quantity' => $quantity,
+            ];
+
             $lineItems[] = [
                 'price_data' => [
                     'currency' => 'myr',
                     'product_data' => [
                         'name' => is_array($cartItem) ? $cartItem['name'] : $cartItem->item->name,
-                        'images' => is_array($cartItem) ? [asset($cartItem['photo'])] : [asset($cartItem->photo)],
+                        'images' => is_array($cartItem) ? [asset($cartItem['photo'])] : [asset($cartItem->item->photo)],
                     ],
                     'unit_amount' => $itemPrice,
                 ],
@@ -135,17 +143,22 @@ class CartController extends Controller
 
         $existingOrder = Order::where('user_id', Auth::id())->where('status', 'unpaid')->first();
 
+        //dd($lineItemDetails);
+
         if ($existingOrder) {
             $existingOrder->session_id = $session->id;
             $existingOrder->total_price = $totalPrice / 100;
+            $existingOrder->line_items = json_encode($lineItemDetails);
             $existingOrder->save();
         } else {
-            // Create a new order if no unpaid order exists
+            //dd($lineItemDetails);
+            // Create a new order
             Order::create([
                 'user_id' => Auth::id(),
                 'status' => 'unpaid',
                 'total_price' => $totalPrice / 100,
                 'session_id' => $session->id,
+                'line_items' => json_encode($lineItemDetails),
             ]);
         }
 
