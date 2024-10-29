@@ -18,6 +18,7 @@ return new class extends Migration {
             $table->decimal('total_price', 6, 2);
             $table->json('line_items');
             $table->string('session_id');
+            $table->json('shipping_address');
             $table->timestamps();
         });
     }

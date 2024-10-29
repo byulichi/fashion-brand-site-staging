@@ -102,9 +102,22 @@ class CartController extends Controller
     }
 
     // STRIPE
-    public function checkout()
+    public function checkout(Request $request)
     {
         Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
+
+        $request->validate([
+            'address' => 'required|string|max:255',
+            'city' => 'required|string|max:255',
+            'state' => 'required|string|max:255',
+            'zip' => 'required|string|max:20',
+        ]);
+        $shippingAddress = [
+            'address' => $request->input('address'),
+            'city' => $request->input('city'),
+            'state' => $request->input('state'),
+            'zip' => $request->input('zip'),
+        ];
 
         $cartItems = Auth::check() ? Auth::user()->cart()->with('item')->get() : collect(session()->get('cart', []));
         $lineItems = [];
@@ -143,22 +156,20 @@ class CartController extends Controller
 
         $existingOrder = Order::where('user_id', Auth::id())->where('status', 'unpaid')->first();
 
-        //dd($lineItemDetails);
-
         if ($existingOrder) {
             $existingOrder->session_id = $session->id;
             $existingOrder->total_price = $totalPrice / 100;
             $existingOrder->line_items = json_encode($lineItemDetails);
+            $existingOrder->shipping_address = json_encode($shippingAddress);
             $existingOrder->save();
         } else {
-            //dd($lineItemDetails);
-            // Create a new order
             Order::create([
                 'user_id' => Auth::id(),
                 'status' => 'unpaid',
                 'total_price' => $totalPrice / 100,
                 'session_id' => $session->id,
                 'line_items' => json_encode($lineItemDetails),
+                'shipping_address' => json_encode($shippingAddress),
             ]);
         }
 
@@ -167,7 +178,7 @@ class CartController extends Controller
 
     public function success(Request $request)
     {
-        \Stripe\Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
+        Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
         $sessionId = $request->get('session_id');
 
         // Log the start of the success function and session ID

@@ -15,6 +15,7 @@ class Order extends Model
         'total_price',
         'session_id',
         'line_items',
+        'shipping_address',
     ];
 
     public function user()
