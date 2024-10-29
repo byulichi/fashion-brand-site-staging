@@ -34,5 +34,7 @@ Route::post('/checkout', [App\Http\Controllers\CartController::class, 'checkout'
 Route::get('/checkout/success', [App\Http\Controllers\CartController::class, 'success'])->name('checkout.success');
 Route::get('/checkout/cancel', [App\Http\Controllers\CartController::class, 'cancel'])->name('checkout.cancel');
 Route::post('/webhook', [App\Http\Controllers\CartController::class, 'webhook'])->name('checkout.webhook');
+Route::post('/pay/{orderId}', [App\Http\Controllers\CartController::class, 'pay'])->name('order.pay');
+
 
 require __DIR__.'/auth.php';

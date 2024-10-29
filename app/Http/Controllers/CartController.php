@@ -178,7 +178,7 @@ class CartController extends Controller
 
     public function success(Request $request)
     {
-        Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
+        Stripe::setApiKey(apiKey: env('STRIPE_SECRET_KEY'));
         $sessionId = $request->get('session_id');
 
         // Log the start of the success function and session ID
@@ -274,4 +274,40 @@ class CartController extends Controller
 
         return response('');
     }
+
+    // If user hasn't paid
+    public function pay($orderId)
+{
+    Stripe::setApiKey(apiKey: env('STRIPE_SECRET_KEY'));
+
+    $order = Order::findOrFail($orderId);
+    $lineItems = json_decode($order->line_items, true);
+
+    $stripeLineItems = [];
+    foreach ($lineItems as $item) {
+        $product = Item::find($item['id']);
+        if ($product) {
+            $stripeLineItems[] = [
+                'price_data' => [
+                    'currency' => 'myr',
+                    'product_data' => [
+                        'name' => $product->name,
+                    ],
+                    'unit_amount' => $product->price * 100,
+                ],
+                'quantity' => $item['quantity'],
+            ];
+        }
+    }
+
+    $session = \Stripe\Checkout\Session::create([
+        'line_items' => $stripeLineItems,
+        'mode' => 'payment',
+        'success_url' => route('checkout.success') . '?session_id={CHECKOUT_SESSION_ID}',
+        'cancel_url' => route('checkout.cancel'),
+    ]);
+
+    return redirect($session->url);
+}
+
 }
