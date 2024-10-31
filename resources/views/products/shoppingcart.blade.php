@@ -96,15 +96,22 @@
                                 2,
                             ) }}
                         </p>
-                        <p class="card-text">You can choose your shipping option later in the checkout.</p>
-                        <form action="{{ route('checkout') }}" method="POST">
-                            @csrf
-                            <button type="button" class="btn btn-dark w-100 mb-2" data-bs-toggle="modal"
-                                data-bs-target="#shippingModal">
-                                CHECKOUT
+                        @if (Auth::check())
+                            <p class="card-text">You can choose your shipping option later in the checkout.</p>
+                            <form action="{{ route('checkout') }}" method="POST">
+                                @csrf
+                                <button type="button" class="btn btn-dark w-100 mb-2" data-bs-toggle="modal"
+                                    data-bs-target="#shippingModal">
+                                    CHECKOUT
+                                </button>
+                            </form>
+                        @else
+                            <p class="card-text">Login to proceed to checkout.</p>
+                            <button type="button" class="btn btn-dark w-100 mb-2">
+                                <a class="nav-link" href="{{ route('login') }}">Log in</a>
                             </button>
-                        </form>
-                        <a href="{{ route('checkout') }}" class="btn btn-outline-dark w-100">GUEST CHECKOUT</a>
+                        @endif
+                        {{-- <a href="{{ route('checkout') }}" class="btn btn-outline-dark w-100">GUEST CHECKOUT</a> --}}
                     </div>
                 </div>
             </div>
