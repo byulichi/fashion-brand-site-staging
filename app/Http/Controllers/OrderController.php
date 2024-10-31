@@ -11,7 +11,7 @@ class OrderController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $orders = Order::where('user_id', $user->id)->get();
+        $orders = Order::where('user_id', $user->id)->orderBy('updated_at', 'desc')->get();
 
         // dd($orders);
         // Example of filtering orders

@@ -234,7 +234,12 @@ class CartController extends Controller
 
     public function cancel()
     {
-        return view('checkout.cancel')->withErrors(['error' => 'Payment was cancelled.']);
+        $order = Order::where('user_id', Auth::id())->where('status', 'unpaid')->latest()->first();
+        if ($order) {
+            $order->delete();
+        }
+
+        return redirect()->route('cart')->with('message', 'Payment was canceled. Your cart is still intact.');
     }
 
     public function webhook()
@@ -277,37 +282,36 @@ class CartController extends Controller
 
     // If user hasn't paid
     public function pay($orderId)
-{
-    Stripe::setApiKey(apiKey: env('STRIPE_SECRET_KEY'));
+    {
+        Stripe::setApiKey(apiKey: env('STRIPE_SECRET_KEY'));
 
-    $order = Order::findOrFail($orderId);
-    $lineItems = json_decode($order->line_items, true);
+        $order = Order::findOrFail($orderId);
+        $lineItems = json_decode($order->line_items, true);
 
-    $stripeLineItems = [];
-    foreach ($lineItems as $item) {
-        $product = Item::find($item['id']);
-        if ($product) {
-            $stripeLineItems[] = [
-                'price_data' => [
-                    'currency' => 'myr',
-                    'product_data' => [
-                        'name' => $product->name,
+        $stripeLineItems = [];
+        foreach ($lineItems as $item) {
+            $product = Item::find($item['id']);
+            if ($product) {
+                $stripeLineItems[] = [
+                    'price_data' => [
+                        'currency' => 'myr',
+                        'product_data' => [
+                            'name' => $product->name,
+                        ],
+                        'unit_amount' => $product->price * 100,
                     ],
-                    'unit_amount' => $product->price * 100,
-                ],
-                'quantity' => $item['quantity'],
-            ];
+                    'quantity' => $item['quantity'],
+                ];
+            }
         }
+
+        $session = \Stripe\Checkout\Session::create([
+            'line_items' => $stripeLineItems,
+            'mode' => 'payment',
+            'success_url' => route('checkout.success') . '?session_id={CHECKOUT_SESSION_ID}',
+            'cancel_url' => route('checkout.cancel'),
+        ]);
+
+        return redirect($session->url);
     }
-
-    $session = \Stripe\Checkout\Session::create([
-        'line_items' => $stripeLineItems,
-        'mode' => 'payment',
-        'success_url' => route('checkout.success') . '?session_id={CHECKOUT_SESSION_ID}',
-        'cancel_url' => route('checkout.cancel'),
-    ]);
-
-    return redirect($session->url);
-}
-
 }

@@ -1,5 +1,10 @@
 <x-app-layout>
     <div class="container mt-5">
+        @if (session('message'))
+            <div class="alert alert-warning">
+                {{ session('message') }}
+            </div>
+        @endif
         <h1 class="mb-4">My Cart</h1>
         <p class="mb-4">Adding an item to your bag doesn't hold it, so get what you love before it's gone.</p>
         <div class="row">

@@ -1,5 +1,10 @@
 <x-app-layout>
     <div class="container my-5">
+        @if (session('message'))
+            <div class="alert alert-warning">
+                {{ session('message') }}
+            </div>
+        @endif
         <ul class="nav nav-tabs">
             <li class="nav-item">
                 <a class="nav-link active" href="#all" data-toggle="tab">All</a>
