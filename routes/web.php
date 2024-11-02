@@ -9,7 +9,7 @@ Route::get('/', function () {
 
 Route::post('/logout', function () {
     Auth::logout();
-    return redirect('/');
+    return redirect()->to(url()->previous());
 })->name('logout');
 
 Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])
