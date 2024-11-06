@@ -10,6 +10,7 @@
     </head>
 
     <body>
+        @include('youareloggedinmodal')
         <!-- Header -->
         {{-- @include('layouts.navigation') --}}
 
@@ -191,6 +192,17 @@
         <footer class="bg-light text-center py-3 mt-5">
             <p>&copy; 2024 Your Clothing Store. All rights reserved.</p>
         </footer>
+        <script>
+            $(document).ready(function() {
+                console.log("Document ready");
+                @if (session('message'))
+                    console.log("Message found: {{ session('message') }}");
+                    $('#youAreLoggedInModal').modal('show'); // Show the modal if there's a message
+                @else
+                    console.log("No message found");
+                @endif
+            });
+        </script>
     </body>
 
     </html>
