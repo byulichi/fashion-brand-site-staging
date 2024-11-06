@@ -48,7 +48,7 @@
 <style>
     .login-container {
         display: flex;
-        min-height: 100vh;
+        min-height: 80vh;
     }
     .login-form {
         flex: 1;
