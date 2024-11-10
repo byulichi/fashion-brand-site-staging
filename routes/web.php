@@ -21,6 +21,13 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [App\Http\Controllers\ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+Route::middleware(['auth', 'role:staff'])->group(function () {
+    Route::get('/items/create', [App\Http\Controllers\ItemController::class, 'create'])->name('items.create');
+    Route::post('/items', [App\Http\Controllers\ItemController::class, 'store'])->name('items.store');
+    Route::get('/items/{id}/edit', [App\Http\Controllers\ItemController::class, 'edit'])->name('items.edit');
+    Route::put('/items/{id}', [App\Http\Controllers\ItemController::class, 'update'])->name('items.update');
+    Route::delete('/items/{id}', [App\Http\Controllers\ItemController::class, 'destroy'])->name('items.destroy');
+});
 
 Route::get('/products', [App\Http\Controllers\ProductController::class, 'index'])->name('products');
 Route::get('/my-purchases', [App\Http\Controllers\OrderController::class, 'index'])->name('my-purchases');
@@ -36,5 +43,4 @@ Route::get('/checkout/cancel', [App\Http\Controllers\CartController::class, 'can
 Route::post('/webhook', [App\Http\Controllers\CartController::class, 'webhook'])->name('checkout.webhook');
 Route::post('/pay/{orderId}', [App\Http\Controllers\CartController::class, 'pay'])->name('order.pay');
 
-
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

@@ -9,6 +9,10 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
+    const ROLE_USER = 0;
+    const ROLE_STAFF = 1;
+    const ROLE_ADMIN = 2;
+
     use HasFactory, Notifiable;
 
     /**
@@ -45,5 +49,14 @@ class User extends Authenticatable
     public function cart()
     {
         return $this->hasMany(Cart::class);
+    }
+    public function isStaff()
+    {
+        return $this->role === self::ROLE_STAFF;
+    }
+
+    public function isAdmin()
+    {
+        return $this->role === self::ROLE_ADMIN;
     }
 }
