@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Item;
+use App\Models\Type;
 
 class ProductController extends Controller
 {
@@ -34,7 +35,8 @@ class ProductController extends Controller
         }
 
         $items = $query->get();
+        $types = Type::all();
 
-        return view('products.index', compact('items'));
+        return view('products.index', compact('items', 'types'));
     }
 }

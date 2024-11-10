@@ -14,18 +14,26 @@
             <ul class="navbar-nav ms-auto">
                 @if (Route::has('login'))
                     @auth
-                        <li class="nav-item">
-                            <a class="nav-link">Hi, {{ Auth::check() ? Auth::user()->name : null }}</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link">|</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('cart') }}">My Cart</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('my-purchases') }}">My Purchases</a>
-                        </li>
+                        @if (Auth::user()->isStaff())
+                            <!-- Display this section only for staff users -->
+                            <li class="nav-item">
+                                <span class="nav-link text-uppercase fw-bold text-primary">Staff Mode</span>
+                            </li>
+                        @else
+                            <!-- Display this section for non-staff users -->
+                            <li class="nav-item">
+                                <a class="nav-link">Hi, {{ Auth::user()->name }}</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link">|</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('cart') }}">My Cart</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('my-purchases') }}">My Purchases</a>
+                            </li>
+                        @endif
                         <li class="nav-item">
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
@@ -33,6 +41,7 @@
                             </form>
                         </li>
                     @else
+                        <!-- Guest users see this section -->
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('cart') }}">My Cart</a>
                         </li>
