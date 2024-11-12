@@ -1,4 +1,5 @@
-<div class="modal fade" id="editItemModal{{ $item->id }}" tabindex="-1" aria-labelledby="editItemModalLabel{{ $item->id }}" aria-hidden="true">
+<div class="modal fade" id="editItemModal{{ $item->id }}" tabindex="-1"
+    aria-labelledby="editItemModalLabel{{ $item->id }}" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <form action="{{ route('items.update', $item->id) }}" method="POST" enctype="multipart/form-data">
@@ -30,7 +31,8 @@
                     <!-- Item Price -->
                     <div class="form-group mb-3">
                         <label for="price">Price (RM)</label>
-                        <input type="number" name="price" class="form-control" step="0.01" value="{{ $item->price }}" required>
+                        <input type="number" name="price" class="form-control" step="0.01"
+                            value="{{ $item->price }}" required>
                     </div>
 
                     <!-- Item Photo -->
@@ -40,7 +42,8 @@
                     </div>
                 </div>
                 <div class="modal-footer d-flex justify-content-between">
-                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteItemModal{{ $item->id }}">
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                        data-bs-target="#deleteItemModal{{ $item->id }}">
                         Delete
                     </button>
                     <div>
@@ -55,7 +58,8 @@
 </div>
 
 <!-- Delete Confirmation Modal -->
-<div class="modal fade" id="deleteItemModal{{ $item->id }}" tabindex="-1" aria-labelledby="deleteItemModalLabel{{ $item->id }}" aria-hidden="true">
+<div class="modal fade" id="deleteItemModal{{ $item->id }}" tabindex="-1"
+    aria-labelledby="deleteItemModalLabel{{ $item->id }}" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">

@@ -36,7 +36,8 @@ class ProductController extends Controller
 
         $items = $query->get();
         $types = Type::all();
+        // dd($type);
 
-        return view('products.index', compact('items', 'types'));
+        return view('products.index', compact('items', 'types', 'type'));
     }
 }

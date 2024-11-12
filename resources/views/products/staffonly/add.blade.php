@@ -1,14 +1,14 @@
 @if (Auth::check() && Auth::user()->isStaff())
     <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-        <div class="card text-center" style="border: 2px dashed #ccc;">
-            <div class="card-body d-flex flex-column align-items-center justify-content-center" style="height: 546px;">
-                <a href="#" class="text-decoration-none text-muted" data-bs-toggle="modal"
-                    data-bs-target="#addItemModal">
+        <a href="#" class="text-decoration-none text-muted" data-bs-toggle="modal" data-bs-target="#addItemModal">
+            <div class="card text-center" style="border: 2px dashed #ccc;">
+                <div class="card-body d-flex flex-column align-items-center justify-content-center"
+                    style="height: 546px;">
                     <h1 class="display-4">+</h1>
                     <p class="h5">Add Item</p>
-                </a>
+                </div>
             </div>
-        </div>
+        </a>
     </div>
 
     <!-- Add Item Modal -->
@@ -33,10 +33,14 @@
                             <label for="type_id">Type</label>
                             <select name="type_id" class="form-control" required>
                                 @foreach ($types as $type)
-                                    <option value="{{ $type->id }}">{{ $type->name }}</option>
+                                    <option value="{{ $type->id }}"
+                                        {{ $type->id == $item->type_id ? 'selected' : '' }}>
+                                        {{ $type->name }}
+                                    </option>
                                 @endforeach
                             </select>
                         </div>
+
 
                         <!-- Item Price -->
                         <div class="form-group mb-3">
