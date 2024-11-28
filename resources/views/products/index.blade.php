@@ -54,7 +54,7 @@
             @endforeach
 
             <!-- Conditional Add Item Card for Staff Users -->
-            @include("products.staffonly.add");
+            @include("products.staffonly.add")
         </div>
     </div>
 
