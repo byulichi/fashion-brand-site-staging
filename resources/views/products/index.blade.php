@@ -37,7 +37,8 @@
                         <img src="{{ $item->photo ? asset($item->photo) : 'https://via.placeholder.com/400x600' }}"
                             style="width: 304px; height: 456px; object-fit: cover;"
                             class="card-img-top img-fluid product-image hover-cursor" alt="{{ $item->name }}"
-                            data-bs-toggle="modal" data-bs-target="#{{ Auth::check() && Auth::user()->isStaff() ? 'editItemModal' . $item->id : 'addToCartModal' . $item->id }}">
+                            data-bs-toggle="modal"
+                            data-bs-target="#{{ Auth::check() && Auth::user()->isStaff() ? 'editItemModal' . $item->id : 'productModal' . $item->id }}">
                         <div class="card-body text-center">
                             <h5 class="card-title">{{ $item->name }}</h5>
                             <p class="card-text">RM {{ number_format($item->price, 2) }}</p>
@@ -54,7 +55,7 @@
             @endforeach
 
             <!-- Conditional Add Item Card for Staff Users -->
-            @include("products.staffonly.add")
+            @include('products.staffonly.add')
         </div>
     </div>
 
