@@ -60,14 +60,16 @@
                                                                 value="{{ is_array($cartItem) ? $cartItem['quantity'] + 1 : $cartItem->quantity + 1 }}">+</button>
                                                         </div>
                                                     </form>
-                                                    <form
+                                                    <form id="removeForm{{ $cartItem->id }}"
                                                         action="{{ route('cart.remove', is_array($cartItem) ? $key : $cartItem->id) }}"
                                                         method="POST">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button type="submit"
-                                                            class="text-danger mt-2 btn btn-link">Remove
-                                                            &times;</button>
+                                                        <button type="button" class="text-danger mt-2 btn btn-link"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#confirmRemoveModal{{ $cartItem->id }}">
+                                                            Remove &times;
+                                                        </button>
                                                     </form>
                                                 </div>
                                             </td>
@@ -75,6 +77,35 @@
                                                 {{ number_format((is_array($cartItem) ? $cartItem['price'] : $cartItem->item->price) * (is_array($cartItem) ? $cartItem['quantity'] : $cartItem->quantity), 2) }}
                                             </td>
                                         </tr>
+                                        <!-- Remove item confirmation modal -->
+                                        <div class="modal fade" id="confirmRemoveModal{{ $cartItem->id }}"
+                                            tabindex="-1" aria-labelledby="confirmRemoveLabel{{ $cartItem->id }}"
+                                            aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title"
+                                                            id="confirmRemoveLabel{{ $cartItem->id }}">Confirm Removal
+                                                        </h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                            aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        Are you sure you want to remove
+                                                        <strong>{{ is_array($cartItem) ? $cartItem['name'] : $cartItem->item->name }}</strong>
+                                                        from your
+                                                        cart?
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-bs-dismiss="modal">Cancel</button>
+                                                        <button type="submit" form="removeForm{{ $cartItem->id }}"
+                                                            class="btn btn-danger">Yes,
+                                                            Remove</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     @endforeach
                                 </tbody>
                             </table>
