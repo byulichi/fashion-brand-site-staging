@@ -16,22 +16,24 @@
                             @csrf
                             <input type="hidden" name="sort" value="{{ request('sort') }}">
                             <input type="hidden" name="type" value="{{ request('type') }}">
+                            <div class="dropdown">
 
-                            <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"
-                                aria-expanded="false">
-                                Add to Cart
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <button type="submit" name="action" value="checkout"
-                                        class="dropdown-item">Checkout</button>
-                                </li>
-                                <li>
-                                    <button type="submit" name="action" value="continue"
-                                        class="dropdown-item">Continue
-                                        Shopping</button>
-                                </li>
-                            </ul>
+                                <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    Add to Cart
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <button type="submit" name="action" value="checkout"
+                                            class="dropdown-item">Checkout</button>
+                                    </li>
+                                    <li>
+                                        <button type="submit" name="action" value="continue"
+                                            class="dropdown-item">Continue
+                                            Shopping</button>
+                                    </li>
+                                </ul>
+                            </div>
                         </form>
                     </div>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -40,7 +42,9 @@
         </div>
     </div>
 @else
-    <div class="modal fade" id="productModal{{ $item->id }}" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">
+    <?php session(['url.intended' => url()->full()]); ?>
+    <div class="modal fade" id="productModal{{ $item->id }}" tabindex="-1"
+        aria-labelledby="productModalLabel{{ $item->id }}" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -53,7 +57,7 @@
                 <div class="modal-footer">
                     <a href="{{ route('login') }}" class="btn btn-primary">Log In</a>
                     <a href="{{ route('register') }}" class="btn btn-secondary">Register</a>
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                    {{-- <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button> --}}
                 </div>
             </div>
         </div>

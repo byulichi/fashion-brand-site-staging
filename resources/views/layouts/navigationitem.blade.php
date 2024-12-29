@@ -1,6 +1,6 @@
 <ul class="navbar-nav mx-auto"> <!-- Centered Navigation -->
     <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="newInDropdown" role="button" data-bs-toggle="dropdown"
+        <a class="nav-link dropdown-toggle " href="#" id="newInDropdown" role="button"
             aria-expanded="false">
             New In
         </a>
@@ -11,12 +11,13 @@
         </ul>
     </li>
     <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="scarvesDropdown" role="button" data-bs-toggle="dropdown"
-            aria-expanded="false">
+        <a class="nav-link dropdown-toggle " href="#" id="scarvesDropdown" role="button"
+           aria-expanded="false">
             Scarves
         </a>
-        <ul class="dropdown-menu" aria-labelledby="scarvesDropdown">
+        <ul class="dropdown-menu animate-dropdown" aria-labelledby="scarvesDropdown">
             <li><a class="dropdown-item" href="#">Combo Deals</a></li>
+            <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" href="#">Plain Square</a></li>
             <li><a class="dropdown-item" href="#">Printed Square</a></li>
             <li><a class="dropdown-item" href="#">Plain Shawl</a></li>
@@ -30,8 +31,8 @@
         </ul>
     </li>
     <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="readyToWearDropdown" role="button"
-            data-bs-toggle="dropdown" aria-expanded="false">
+        <a class="nav-link dropdown-toggle " href="#" id="readyToWearDropdown" role="button"
+            aria-expanded="false">
             Ready To Wear
         </a>
         <ul class="dropdown-menu" aria-labelledby="readyToWearDropdown">
@@ -41,8 +42,8 @@
         </ul>
     </li>
     <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="collaborationsDropdown" role="button"
-            data-bs-toggle="dropdown" aria-expanded="false">
+        <a class="nav-link dropdown-toggle " href="#" id="collaborationsDropdown" role="button"
+            aria-expanded="false">
             Collaborations
         </a>
         <ul class="dropdown-menu" aria-labelledby="collaborationsDropdown">
@@ -52,7 +53,7 @@
         </ul>
     </li>
     <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="aryanDropdown" role="button" data-bs-toggle="dropdown"
+        <a class="nav-link dropdown-toggle " href="#" id="aryanDropdown" role="button"
             aria-expanded="false">
             Aryan
         </a>
@@ -63,7 +64,7 @@
         </ul>
     </li>
     <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="LuxeDropdown" role="button" data-bs-toggle="dropdown"
+        <a class="nav-link dropdown-toggle " href="#" id="LuxeDropdown" role="button"
             aria-expanded="false">
             Luxe
         </a>
@@ -74,8 +75,8 @@
         </ul>
     </li>
     <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="prayerwearDropdown" role="button"
-            data-bs-toggle="dropdown" aria-expanded="false">
+        <a class="nav-link dropdown-toggle " href="#" id="prayerwearDropdown" role="button"
+            aria-expanded="false">
             Suit
         </a>
         <ul class="dropdown-menu" aria-labelledby="prayerwearDropdown">
@@ -85,8 +86,8 @@
         </ul>
     </li>
     <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="bagsDropdown" role="button"
-            data-bs-toggle="dropdown" aria-expanded="false">
+        <a class="nav-link dropdown-toggle " href="#" id="bagsDropdown" role="button"
+            aria-expanded="false">
             Bags
         </a>
         <ul class="dropdown-menu" aria-labelledby="bagsDropdown">
@@ -97,7 +98,7 @@
     </li>
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="accessoriesAndGiftingDropdown" role="button"
-            data-bs-toggle="dropdown" aria-expanded="false">
+            aria-expanded="false">
             Accessories & Gifting
         </a>
         <ul class="dropdown-menu" aria-labelledby="accessoriesAndGiftingDropdown">

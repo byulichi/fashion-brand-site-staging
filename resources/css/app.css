@@ -1,1 +1,165 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Playfair+Display:wght@400;500;600&display=swap');
 @import "bootstrap/dist/css/bootstrap.min.css";
+
+/* Dropdown menu styling */
+.dropdown-menu {
+    position: absolute;
+    padding: 1rem 0;
+    margin-top: 0;
+    border: none;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    border-radius: 0rem 0rem 1rem 1rem;
+    min-width: 220px;
+    transform-origin: top;
+    animation: dropdownAnimation 0.2s ease;
+    display: none;
+}
+
+/* Base styling */
+:root {
+    --primary-color: #1a1a1a;
+    --secondary-color: #4a4a4a;
+    --accent-color: #9f7aea;
+    --background-color: #ffffff;
+    --text-light: #666666;
+}
+
+/* Global reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    font-size: 16px;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    line-height: 1.6;
+    color: var(--primary-color);
+    background-color: #f8f9fa;
+}
+
+/* ダークモードサポート */
+/* @media (prefers-color-scheme: dark) {
+    body {
+        background-color: #212529;
+    }
+} */
+
+/* Typography */
+h1, h2, h3, h4, h5 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 500;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+}
+
+h1 { font-size: clamp(2rem, 5vw, 3.5rem); }
+h2 { font-size: clamp(1.5rem, 4vw, 2.5rem); }
+h3 { font-size: clamp(1.2rem, 3vw, 2rem); }
+
+p {
+    margin-bottom: 1.5rem;
+    color: var(--text-light);
+}
+
+/* Container */
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Spacing utility classes */
+.mb-1 { margin-bottom: 1rem; }
+.mb-2 { margin-bottom: 2rem; }
+.mb-3 { margin-bottom: 3rem; }
+.mt-1 { margin-top: 1rem; }
+.mt-2 { margin-top: 2rem; }
+.mt-3 { margin-top: 3rem; }
+
+/* Dropdown items styling */
+.dropdown-item {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.9rem;
+    color: #4B5563;
+    transition: all 0.2s ease;
+}
+
+/* Hover effect for dropdown items */
+.dropdown-item:hover {
+    background-color: #F3F4F6;
+    color: #111827;
+    transform: translateX(5px);
+}
+
+/* Active dropdown item */
+.dropdown-item.active {
+    background-color: #E5E7EB;
+    color: #111827;
+}
+
+/* Add arrow to dropdown toggle */
+.dropdown-toggle::after {
+    margin-left: 0.5rem;
+    transition: transform 0.2s ease;
+}
+
+/* Rotate arrow when dropdown is shown */
+.dropdown.show .dropdown-toggle::after {
+    transform: rotate(180deg);
+}
+
+/* Animate dropdown menu */
+@keyframes dropdownAnimation {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.dropdown:hover .dropdown-menu,
+.dropdown-menu:hover {
+    display: block;
+    opacity: 1;
+    visibility: visible;
+}
+
+/* ドロップダウンメニューの位置調整 */
+.dropdown-menu-end {
+    right: 0;
+    left: auto;
+    /* margin-top: 0.5rem; */
+    min-width: 200px; /* メニューの最小幅を設定 */
+}
+
+/* モバイル対応 */
+@media (max-width: 991.98px) {
+    .position-static .dropdown-menu {
+        /* position: static !important; */
+        width: 100%;
+        margin-top: 0;
+    }
+}
+
+/* ドロップダウンメニューが画面外にはみ出すのを防ぐ */
+/* .navbar-nav .dropdown {
+    position: relative;
+} */
+
+.navbar-nav .dropdown-menu {
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
+    overflow-x: hidden;
+}
