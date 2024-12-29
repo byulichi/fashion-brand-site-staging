@@ -61,7 +61,23 @@
                             </a>
                         </li>
                     @else
-                        <!-- 非認証ユーザー用のナビゲーション -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('login') }}">
+                                <i class="fas fa-sign-in-alt me-1"></i>
+                                Login
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('register') }}">
+                                <i class="fas fa-user-plus me-1"></i>
+                                Sign Up
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link position-relative" href="{{ route('cart') }}">
+                                <i class="fas fa-shopping-cart"></i>
+                            </a>
+                        </li>
                     @endauth
                 @endif
             </ul>
@@ -91,5 +107,16 @@
     }
     .dropdown-item.logout-link:hover {
         color: darken(var(--accent-color), 10%);
+    }
+    .nav-link {
+        color: #333;
+        font-weight: 500;
+        transition: all 0.2s ease;
+    }
+    .nav-link:hover {
+        color: #0d6efd;
+    }
+    .nav-item {
+        margin-left: 0.5rem;
     }
 </style>
