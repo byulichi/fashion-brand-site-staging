@@ -1,5 +1,5 @@
 <!-- Header -->
-<header class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+<header class="navbar navbar-expand-lg navbar-light bg-white sticky-top">
     <?php session(['url.intended' => url()->full()]); ?>
     <div class="container-fluid my-2">
         <a class="navbar-brand" href="{{ url('/') }}">
@@ -36,15 +36,17 @@
                                         <i class="fas fa-shopping-bag me-2"></i>My Purchases
                                     </a>
                                 </li>
+
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
                                 <li>
-                                    <form method="POST" action="{{ route('logout') }}" class="dropdown-item">
+                                    <a href="#" class="dropdown-item logout-link"
+                                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                        <i class="fas fa-sign-out-alt me-2"></i>Logout
+                                    </a>
+                                    <form id="logout-form" method="POST" action="{{ route('logout') }}" class="d-none">
                                         @csrf
-                                        <button type="submit" class="btn btn-link text-decoration-none p-0">
-                                            <i class="fas fa-sign-out-alt me-2"></i>Logout
-                                        </button>
                                     </form>
                                 </li>
                             </ul>
@@ -83,5 +85,11 @@
     .badge {
         font-size: 0.6rem;
         padding: 0.25em 0.4em;
+    }
+    .dropdown-item.logout-link {
+        color: var(--accent-color);
+    }
+    .dropdown-item.logout-link:hover {
+        color: darken(var(--accent-color), 10%);
     }
 </style>

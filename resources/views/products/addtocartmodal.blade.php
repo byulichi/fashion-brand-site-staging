@@ -18,7 +18,7 @@
                             <input type="hidden" name="type" value="{{ request('type') }}">
                             <div class="dropdown">
 
-                                <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"
+                                <button type="button" class="btn btn-primary dropdown-toggle"
                                     aria-expanded="false">
                                     Add to Cart
                                 </button>
