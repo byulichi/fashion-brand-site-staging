@@ -12,7 +12,7 @@
                 <div class="container mt-4">
                     <div class="row">
                         <div class="col-12">
-                            <table class="table">
+                            <table class="table cart-table">
                                 <thead>
                                     <tr>
                                         <th scope="col">Product Description</th>
@@ -48,28 +48,32 @@
                                                         action="{{ route('cart.update', is_array($cartItem) ? $key : $cartItem->id) }}"
                                                         method="POST">
                                                         @csrf
-                                                        <div class="input-group" style="width: 120px;">
-                                                            <button class="btn btn-outline-secondary" type="submit"
-                                                                name="quantity"
-                                                                value="{{ is_array($cartItem) ? $cartItem['quantity'] - 1 : $cartItem->quantity - 1 }}">-</button>
-                                                            <input type="text" class="form-control text-center"
+                                                        <div class="input-group quantity-selector"
+                                                            style="width: 120px;">
+                                                            <button class="btn btn-outline-primary quantity-btn"
+                                                                type="submit" name="quantity"
+                                                                value="{{ is_array($cartItem) ? $cartItem['quantity'] - 1 : $cartItem->quantity - 1 }}">
+                                                                <i class="fas fa-minus"></i>
+                                                            </button>
+                                                            <input type="text"
+                                                                class="form-control text-center quantity-input"
                                                                 value="{{ is_array($cartItem) ? $cartItem['quantity'] : $cartItem->quantity }}"
                                                                 readonly>
-                                                            <button class="btn btn-outline-secondary" type="submit"
-                                                                name="quantity"
-                                                                value="{{ is_array($cartItem) ? $cartItem['quantity'] + 1 : $cartItem->quantity + 1 }}">+</button>
+                                                            <button class="btn btn-outline-primary quantity-btn"
+                                                                type="submit" name="quantity"
+                                                                value="{{ is_array($cartItem) ? $cartItem['quantity'] + 1 : $cartItem->quantity + 1 }}">
+                                                                <i class="fas fa-plus"></i>
+                                                            </button>
                                                         </div>
                                                     </form>
-                                                    <form id="removeForm{{ $cartItem->id }}"
+                                                    <form
                                                         action="{{ route('cart.remove', is_array($cartItem) ? $key : $cartItem->id) }}"
                                                         method="POST">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button type="button" class="text-danger mt-2 btn btn-link"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#confirmRemoveModal{{ $cartItem->id }}">
-                                                            Remove &times;
-                                                        </button>
+                                                        <button type="submit"
+                                                            class="text-danger mt-2 btn btn-link text-decoration-none">Remove
+                                                            ×</button>
                                                     </form>
                                                 </div>
                                             </td>
@@ -77,35 +81,6 @@
                                                 {{ number_format((is_array($cartItem) ? $cartItem['price'] : $cartItem->item->price) * (is_array($cartItem) ? $cartItem['quantity'] : $cartItem->quantity), 2) }}
                                             </td>
                                         </tr>
-                                        <!-- Remove item confirmation modal -->
-                                        <div class="modal fade" id="confirmRemoveModal{{ $cartItem->id }}"
-                                            tabindex="-1" aria-labelledby="confirmRemoveLabel{{ $cartItem->id }}"
-                                            aria-hidden="true">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title"
-                                                            id="confirmRemoveLabel{{ $cartItem->id }}">Confirm Removal
-                                                        </h5>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                            aria-label="Close"></button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        Are you sure you want to remove
-                                                        <strong>{{ is_array($cartItem) ? $cartItem['name'] : $cartItem->item->name }}</strong>
-                                                        from your
-                                                        cart?
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary"
-                                                            data-bs-dismiss="modal">Cancel</button>
-                                                        <button type="submit" form="removeForm{{ $cartItem->id }}"
-                                                            class="btn btn-danger">Yes,
-                                                            Remove</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
                                     @endforeach
                                 </tbody>
                             </table>
@@ -115,7 +90,7 @@
             </div>
 
             <div class="col-md-4">
-                <div class="card">
+                <div class="card grey-border">
                     <div class="card-body">
                         <h5 class="card-title">Subtotal: (ex. Shipping)</h5>
                         <p class="card-text">RM
@@ -131,7 +106,7 @@
                             <p class="card-text">You can choose your shipping option later in the checkout.</p>
                             <form action="{{ route('checkout') }}" method="POST">
                                 @csrf
-                                <button type="button" class="btn btn-dark w-100 mb-2" data-bs-toggle="modal"
+                                <button type="button" class="btn btn-primary w-100 mb-2" data-bs-toggle="modal"
                                     data-bs-target="#shippingModal">
                                     CHECKOUT
                                 </button>
@@ -150,3 +125,75 @@
     </div>
     @include('products.checkoutmodal')
 </x-app-layout>
+<style>
+    .quantity-selector {
+        border-radius: 25px;
+        overflow: hidden;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        display: flex;
+    }
+    .quantity-btn {
+        border: none;
+        background: var(--background-color);
+        color: var(--accent-color);
+        padding: 0.5rem 0.75rem;
+        transition: all 0.2s ease;
+        width: 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .quantity-btn:hover {
+        background: var(--accent-color);
+        color: white;
+    }
+    .quantity-btn:first-of-type::before {
+        content: "-";
+    }
+    .quantity-btn:last-of-type::before {
+        content: "+";
+    }
+    .quantity-btn i.fas {
+        display: none;
+    }
+    .quantity-input {
+        border: none;
+        background: var(--background-color);
+        font-weight: 600;
+        color: var(--primary-color);
+        width: 30px;
+        text-align: center;
+    }
+    .quantity-input:focus {
+        box-shadow: none;
+    }
+.table.cart-table {
+    border-radius: 0.5rem;
+    overflow: hidden;
+    border: 1px solid #ced4da;
+    box-shadow: 0 0 0 1px #ced4da;
+    background: var(--background-color);
+}
+.table.cart-table thead th {
+    background-color: var(--background-color);
+    color: var(--primary-color);
+    border-bottom: 1px solid #ced4da;
+    padding: 1rem;
+    font-weight: 600;
+}
+.table.cart-table td {
+    padding: 1rem;
+    vertical-align: middle;
+    border-bottom: 1px solid var(--secondary-color);
+}
+.table.cart-table tr:last-child td {
+    border-bottom: none;
+}
+.table.cart-table tbody tr:hover {
+    background-color: rgba(159, 122, 234, 0.05);
+}
+.grey-border {
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+}
+</style>
