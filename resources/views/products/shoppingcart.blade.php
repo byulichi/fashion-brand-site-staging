@@ -184,7 +184,7 @@
 .table.cart-table td {
     padding: 1rem;
     vertical-align: middle;
-    border-bottom: 1px solid var(--secondary-color);
+    border-bottom: 1px solid #ced4da;
 }
 .table.cart-table tr:last-child td {
     border-bottom: none;
