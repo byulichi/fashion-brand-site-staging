@@ -80,59 +80,42 @@
                             professional appeal, these suits offer a perfect blend of sophistication and ease.
                             Perfect for the modern woman who values both style and functionality.
                         </p>
-                        <a href="#" class="btn btn-outline-primary my-3">Shop Now</a>
+                        <a href="{{ route('products', ['type' => 'Leena Suit']) }}" class="btn btn-outline-primary my-3">Shop Now</a>
                     </div>
                     <div class="col-md-8">
                         <div id="newArrivalsCarousel" class="carousel slide" data-bs-ride="carousel">
                             <div class="carousel-inner">
-                                <div class="carousel-item active">
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <div class="card">
-                                                <img src="{{ asset('images/Leena_suit/IMG_0223.JPG') }}" class="card-img-top"
-                                                    alt="Shawl Iconic Vol.3" style="width: 517px; height: 775px; object-fit: cover;">
-                                                <div class="card-body">
-                                                    <h5 class="card-title">Shawl Iconic Vol.3 In Dark Blue</h5>
-                                                    <p class="card-text">RM 159.00</p>
+                                @php
+                                    $leenaSuits = [
+                                        ['image' => 'IMG_0223.JPG', 'color' => 'Navy Blue'],
+                                        ['image' => 'IMG_0230.JPG', 'color' => 'Maroon'],
+                                        ['image' => 'IMG_0242.JPG', 'color' => 'Sakura Pink'],
+                                        ['image' => 'IMG_0233.JPG', 'color' => 'Sakura Pink'],
+                                    ];
+                                @endphp
+
+                                @foreach(array_chunk($leenaSuits, 2) as $index => $pair)
+                                    <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
+                                        <div class="row">
+                                            @foreach($pair as $suit)
+                                                <div class="col-6">
+                                                    <div class="card">
+                                                        <a {{--href="{{ route('products', ['type' => 'Leena Suit']) }}" --}}>
+                                                            <img src="{{ asset('images/Leena_suit/' . $suit['image']) }}"
+                                                                 class="card-img-top"
+                                                                 alt="Shawl Iconic Vol.3 in {{ $suit['color'] }}"
+                                                                 style="width: 517px; height: 775px; object-fit: cover;">
+                                                        </a>
+                                                        <div class="card-body">
+                                                            <h5 class="card-title">Leena Suit In {{ $suit['color'] }}</h5>
+                                                            <p class="card-text">RM 159.00</p>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="card">
-                                                <img src="{{ asset('images/Leena_suit/IMG_0230.JPG') }}" class="card-img-top"
-                                                    alt="Shawl Iconic Vol.3" style="width: 517px; height: 775px; object-fit: cover;">
-                                                <div class="card-body">
-                                                    <h5 class="card-title">Shawl Iconic Vol.3 In Mustard</h5>
-                                                    <p class="card-text">RM 159.00</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="carousel-item">
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <div class="card">
-                                                <img src="{{ asset('images/Leena_suit/IMG_0242.JPG') }}" class="card-img-top"
-                                                    alt="Shawl Iconic Vol.3" style="width: 517px; height: 775px; object-fit: cover;">
-                                                <div class="card-body">
-                                                    <h5 class="card-title">Shawl Iconic Vol.3 In Red</h5>
-                                                    <p class="card-text">RM 159.00</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="card">
-                                                <img src="{{ asset('images/Leena_suit/IMG_0233.JPG') }}" class="card-img-top"
-                                                    alt="Shawl Iconic Vol.3" style="width: 517px; height: 775px; object-fit: cover;">
-                                                <div class="card-body">
-                                                    <h5 class="card-title">Shawl Iconic Vol.3 In Black</h5>
-                                                    <p class="card-text">RM 159.00</p>
-                                                </div>
-                                            </div>
+                                            @endforeach
                                         </div>
                                     </div>
-                                </div>
+                                @endforeach
                             </div>
                             <button class="carousel-control-prev" type="button"
                                 data-bs-target="#newArrivalsCarousel" data-bs-slide="prev">
@@ -163,7 +146,7 @@
                             <div class="position-absolute bottom-0 start-0 p-3">
                                 <h2 class="text-white">Scarves</h2>
                                 <p class="text-white">Wrap Yourself in Elegance: Discover Our Scarf Range</p>
-                                <a href="#" class="btn btn-outline-light">Discover Now</a>
+                                <a href="{{ route('products', ['type' => 'Scarves']) }}" class="btn btn-outline-light">Discover Now</a>
                             </div>
                         </div>
                     </div>
@@ -178,7 +161,7 @@
                             <div class="position-absolute bottom-0 start-0 p-3">
                                 <h2 class="text-white">Ready-to-Wear</h2>
                                 <p class="text-white">Seamless Style for Every Occasion</p>
-                                <a href="#" class="btn btn-outline-light">Discover Now</a>
+                                <a href="{{ route('products', ['type' => 'Ready to Wear']) }}" class="btn btn-outline-light">Discover Now</a>
                             </div>
                         </div>
                     </div>
@@ -187,3 +170,28 @@
 
         </main>
 </x-app-layout>
+<style>
+    .carousel-control-prev,
+    .carousel-control-next {
+        width: 10%;
+        background: linear-gradient(to right, rgba(0, 0, 0, 0.3), transparent);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .carousel-control-next {
+        background: linear-gradient(to left, rgba(0, 0, 0, 0.3), transparent);
+    }
+
+    .carousel:hover .carousel-control-prev,
+    .carousel:hover .carousel-control-next {
+        opacity: 1;
+    }
+
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+        width: 2.5rem;
+        height: 2.5rem;
+        filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.3));
+    }
+</style>
