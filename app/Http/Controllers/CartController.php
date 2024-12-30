@@ -64,16 +64,19 @@ class CartController extends Controller
 
     public function update($itemId, Request $request)
     {
+        if($request->input('quantity', 1) <= 0) {
+            // Quantity is 0 or negative, remove the item
+            return $this->remove($itemId, $request);
+        }
+
         if (Auth::check()) {
             $cartItem = Cart::where('user_id', Auth::id())->where('id', $itemId)->firstOrFail();
-            $quantity = $request->input('quantity', 1);
-            $cartItem->quantity = max(1, $quantity);
+            $cartItem->quantity = $request->input('quantity', 1);
             $cartItem->save();
         } else {
             $cart = session()->get('cart', []);
             if (isset($cart[$itemId])) {
-                $quantity = max(1, $request->input('quantity', 1));
-                $cart[$itemId]['quantity'] = $quantity;
+                $cart[$itemId]['quantity'] = $request->input('quantity', 1);
                 session()->put('cart', $cart);
             }
         }
