@@ -20,14 +20,12 @@
                             <li><a class="dropdown-item"
                                     href="{{ route('products', array_merge(request()->only(['type']), ['sort' => 'latest'])) }}">Latest</a>
                             </li>
-
                             <li><a class="dropdown-item"
                                     href="{{ route('products', array_merge(request()->only(['type']), ['sort' => 'price_asc'])) }}">Price:
                                     Low to High</a></li>
                             <li><a class="dropdown-item"
                                     href="{{ route('products', array_merge(request()->only(['type']), ['sort' => 'price_desc'])) }}">Price:
                                     High to Low</a></li>
-
                         </ul>
                     </div>
                 </div>
@@ -38,19 +36,26 @@
             @foreach ($items as $item)
                 <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
                     <div class="card">
-                        <img src={{ $item->photo ? asset($item->photo) : 'https://via.placeholder.com/400x600' }}
+                        <img src="{{ $item->photo ? asset($item->photo) : 'https://via.placeholder.com/400x600' }}"
                             style="width: 304px; height: 456px; object-fit: cover;"
                             class="card-img-top img-fluid product-image hover-cursor" alt="{{ $item->name }}"
-                            data-bs-toggle="modal" data-bs-target="#productModal{{ $item->id }}">
+                            data-bs-toggle="modal"
+                            data-bs-target="#{{ Auth::check() && Auth::user()->isStaff() ? 'editItemModal' . $item->id : 'productModal' . $item->id }}">
                         <div class="card-body text-center">
                             <h5 class="card-title">{{ $item->name }}</h5>
                             <p class="card-text">RM {{ number_format($item->price, 2) }}</p>
                         </div>
                     </div>
                 </div>
-                <!-- Add to cart Modal -->
-                @include('products.addtocartmodal', ['item' => $item])
+                <!-- スタッフユーザーかどうかで表示するモーダルを切り替え -->
+                @if (Auth::check() && Auth::user()->isStaff())
+                    @include('products.staffonly.edit', ['item' => $item])
+                @else
+                    @include('products.addtocartmodal', ['item' => $item])
+                @endif
             @endforeach
+            <!-- スタッフユーザー用の商品追加カード -->
+            @include('products.staffonly.add')
         </div>
     </div>
 
@@ -80,10 +85,6 @@
 
         .card-body {
             padding: 1.5rem;
-        }
-
-        .hover-cursor {
-            cursor: pointer;
         }
 
         .card-title {
