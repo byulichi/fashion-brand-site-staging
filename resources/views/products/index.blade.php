@@ -58,5 +58,42 @@
         .hover-cursor {
             cursor: pointer;
         }
+
+        /* animation */
+        .card {
+            border: none;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            background-color: var(--background-color);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-image {
+            border-radius: 10px 10px 0 0;
+            transition: all 0.3s ease;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        .hover-cursor {
+            cursor: pointer;
+        }
+
+        .card-title {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .card-text {
+            color: var(--accent-color);
+            font-weight: 600;
+        }
     </style>
 </x-app-layout>

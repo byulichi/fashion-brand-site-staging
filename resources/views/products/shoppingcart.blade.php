@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div class="container mt-5">
+    <div class="container-xxl mt-5">
         @if (session('message'))
             <div class="alert alert-warning">
                 {{ session('message') }}
@@ -9,7 +9,7 @@
         <p class="mb-4">Adding an item to your bag doesn't hold it, so get what you love before it's gone.</p>
         <div class="row">
             <div class="col-md-8">
-                <div class="container mt-4">
+                <div class="container-fluid mt-4">
                     <div class="row">
                         <div class="col-12">
                             <table class="table cart-table">
