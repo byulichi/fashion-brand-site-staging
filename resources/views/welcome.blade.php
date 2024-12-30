@@ -1,19 +1,5 @@
 <x-app-layout>
-    <!DOCTYPE html>
-    <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Home page</title>
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-    </head>
-
     <body>
-        <!-- Header -->
-        {{-- @include('layouts.navigation') --}}
-
-        <!-- Main Content -->
         <main class="container-fluid">
             <!-- Hero Section -->
             <div class="row">
@@ -200,12 +186,4 @@
             </div>
 
         </main>
-
-        <!-- Footer -->
-        <footer class="bg-white text-center py-3 mt-5">
-            <p>&copy; 2024 Your Clothing Store. All rights reserved.</p>
-        </footer>
-    </body>
-
-    </html>
 </x-app-layout>

@@ -23,5 +23,9 @@
                 {{ $slot }}
             </main>
         </div>
+        <!-- Footer -->
+        <footer class="bg-white text-center py-3 mt-5">
+            <p>&copy; 2024 Your Clothing Store. All rights reserved.</p>
+        </footer>
     </body>
 </html>
