@@ -164,34 +164,32 @@ p {
     overflow-x: hidden;
 }
 
+/* Bootstrap primary button override */
 .btn-primary {
     background-color: var(--accent-color);
     border-color: var(--accent-color);
     color: #fff;
     transition: all 0.2s ease-in-out;
 }
-.btn-primary:hover {
-    background-color: var(--accent-color);
-    border-color: var(--accent-color);
-    filter: brightness(0.9);
-    color: #fff;
-}
+
+.btn-primary:hover,
 .btn-primary:focus,
-.btn-primary.focus {
+.btn-primary:active {
     background-color: var(--accent-color);
     border-color: var(--accent-color);
-    filter: brightness(0.85);
-    color: #fff;
+    opacity: 0.9;
+}
+
+.btn-primary:not(:disabled):not(.disabled):active,
+.btn-primary:not(:disabled):not(.disabled).active {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+}
+
+.btn-primary:focus {
     box-shadow: 0 0 0 0.2rem rgba(159, 122, 234, 0.5);
 }
-.btn-primary:active,
-.btn-primary.active,
-.show > .btn-primary.dropdown-toggle {
-    background-color: var(--accent-color);
-    border-color: var(--accent-color);
-    filter: brightness(0.8);
-    color: #fff;
-}
+
 .btn-primary:disabled,
 .btn-primary.disabled {
     background-color: var(--accent-color);
@@ -199,4 +197,30 @@ p {
     opacity: 0.65;
     color: #fff;
     filter: saturate(0.8);
+}
+/* Bootstrap outline primary button override */
+.btn-outline-primary {
+    color: var(--accent-color);
+    border-color: var(--accent-color);
+    background-color: transparent;
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-outline-primary:hover,
+.btn-outline-primary:focus,
+.btn-outline-primary:active {
+    color: #fff;
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+}
+
+.btn-outline-primary:not(:disabled):not(.disabled):active,
+.btn-outline-primary:not(:disabled):not(.disabled).active {
+    color: #fff;
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+}
+
+.btn-outline-primary:focus {
+    box-shadow: 0 0 0 0.2rem rgba(159, 122, 234, 0.5);
 }

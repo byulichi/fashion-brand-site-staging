@@ -3,7 +3,9 @@
     <?php session(['url.intended' => url()->full()]); ?>
     <div class="container-fluid my-2">
         <a class="navbar-brand" href="{{ url('/') }}">
-            <img src="#" height="40" alt="Brand Logo">
+            <div style="height: 60px; width: auto;">
+            <img src="{{ asset('images/Logo/Welcome_page_logo.png') }}" style="height: 250%; width: auto; object-fit: contain; transform: translateX(0%) translateY(-28%);" alt="Brand Logo">
+            </div>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -90,13 +92,13 @@
         color: #212529;
     }
     .dropdown-item button:hover {
-        color: #0d6efd;
+        color: var(--accent-color);
     }
     .nav-link {
         transition: all 0.2s ease-in-out;
     }
     .nav-link:hover {
-        color: #0d6efd;
+        color: var(--accent-color);
     }
     .badge {
         font-size: 0.6rem;
@@ -108,13 +110,13 @@
     .dropdown-item.logout-link:hover {
         color: darken(var(--accent-color), 10%);
     }
-    .nav-link {
+    /* .nav-link {
         color: #333;
         font-weight: 500;
         transition: all 0.2s ease;
-    }
+    } */
     .nav-link:hover {
-        color: #0d6efd;
+        color: var(--accent-color);
     }
     .nav-item {
         margin-left: 0.5rem;
