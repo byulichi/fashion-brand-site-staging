@@ -7,7 +7,7 @@
                     <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
                         <div class="carousel-inner">
                             <div class="carousel-item active">
-                                <img src="{{ asset('images/Banner/sale up to 70% off.jpeg') }}"
+                                <img src="{{ asset('images/Banner/sale up to 70percent off.jpeg') }}"
                                     class="d-block img-fluid" alt="Sale Banner">
                             </div>
                             <div class="carousel-item">
