@@ -16,8 +16,8 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="font-sans antialiased flex flex-col min-h-screen">
-    <div class="bg-white dark:bg-gray-900 flex-grow">
+<body class="font-sans antialiased d-flex flex-column min-vh-100">
+    <div class="flex-grow-1">
         @include('layouts.navigation')
 
         <!-- Page Content -->
@@ -26,10 +26,10 @@
         </main>
     </div>
     <!-- Footer -->
-    <footer class="d-flex align-items-center justify-content-center py-4 mt-auto border-t-2 w-full"
-        style="background-color: #F1F1F1">
-    <p class="text-black m-0"> Copyright © 2025, Fashion Clothing Store. All Rights Reserved.</p>
-</footer>
+    <footer class="d-flex align-items-center justify-content-center py-4 mt-auto border-top border-2"
+        style="background-color: #F1F1F1;">
+        <p class="text-black m-0"> Copyright © 2025, Fashion Clothing Store. All Rights Reserved.</p>
+    </footer>
 </body>
 
 </html>
