@@ -23,37 +23,47 @@ class CartController extends Controller
     public function add(Request $request, $itemId)
     {
         if (Auth::check()) {
-            $cart = new Cart();
-            $cart->user_id = Auth::id();
-            $cart->item_id = $itemId;
-            $cart->quantity = 1;
-            $cart->save();
+            $existingCartItem = Cart::where('user_id', Auth::id())->where('item_id', $itemId)->first();
+
+            if ($existingCartItem) {
+                $existingCartItem->increment('quantity');
+            } else {
+                $cart = new Cart();
+                $cart->user_id = Auth::id();
+                $cart->item_id = $itemId;
+                $cart->quantity = 1;
+                $cart->save();
+            }
         } else {
             $cart = session()->get('cart', []);
             if (isset($cart[$itemId])) {
                 $cart[$itemId]['quantity']++;
             } else {
                 $item = Item::find($itemId);
-                $cart[$itemId] = [
-                    'id' => $itemId,
-                    'type_id' => $item->type_id,
-                    'name' => $item->name,
-                    'price' => $item->price,
-                    'quantity' => 1,
-                    'photo' => $item->photo,
-                ];
+                if ($item) {
+                    $cart[$itemId] = [
+                        'id' => $itemId,
+                        'type_id' => $item->type_id,
+                        'name' => $item->name,
+                        'price' => $item->price,
+                        'quantity' => 1,
+                        'photo' => $item->photo,
+                    ];
+                }
             }
             session()->put('cart', $cart);
         }
 
         $item = Item::find($itemId);
-        $request->session()->flash('item_added', [
-            'id' => $itemId,
-            'type_id' => $item->type_id,
-            'name' => $item->name,
-            'price' => number_format($item->price, 2),
-            'photo' => $item->photo,
-        ]);
+        if ($item) {
+            $request->session()->flash('item_added', [
+                'id' => $itemId,
+                'type_id' => $item->type_id,
+                'name' => $item->name,
+                'price' => number_format($item->price, 2),
+                'photo' => $item->photo,
+            ]);
+        }
 
         if ($request->input('action') === 'checkout') {
             return redirect()->route('cart');
@@ -61,11 +71,9 @@ class CartController extends Controller
             return redirect()->route('products', array_merge($request->only(['sort', 'type'])));
         }
     }
-
     public function update($itemId, Request $request)
     {
-        if($request->input('quantity', 1) <= 0) {
-            // Quantity is 0 or negative, remove the item
+        if ($request->input('quantity', 1) <= 0) {
             return $this->remove($itemId, $request);
         }
 
