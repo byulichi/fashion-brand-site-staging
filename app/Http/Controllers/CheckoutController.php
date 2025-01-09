@@ -13,6 +13,20 @@ use Illuminate\Support\Facades\Log;
 
 class CheckoutController extends Controller
 {
+    public function index ()
+    {
+        $cartItems = Auth::check() ? Auth::user()->cart()->with('item')->get() : collect(session()->get('cart', []));
+        $totalPrice = 0;
+
+        foreach ($cartItems as $cartItem) {
+            $itemPrice = is_array($cartItem) ? $cartItem['price'] : $cartItem->item->price;
+            $quantity = is_array($cartItem) ? $cartItem['quantity'] : $cartItem->quantity;
+            $totalPrice += $itemPrice * $quantity;
+        }
+
+        return view('products.checkout', compact('cartItems', 'totalPrice'));
+    }
+
     // STRIPE
     public function checkout(Request $request)
     {
