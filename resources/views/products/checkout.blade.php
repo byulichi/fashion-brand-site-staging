@@ -8,7 +8,7 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900" x-data="{ editingBilling: false, editingDelivery: false }">
+                <div class="p-6 text-gray-900" x-data="{ editingBilling: true, editingDelivery: false, billing: { name: '{{ auth()->user()->name }}', address: '', city: '', state: '', postcode: '' }, delivery: { name: '{{ auth()->user()->name }}', phone: '{{ auth()->user()->phone }}', street_address: '', city: '', postcode: '', state: '' } }">
                     <h3 class="font-bold mb-5 text-center">Quick Checkout</h2>
 
                     <div class="row mx-5 g-5">
@@ -46,39 +46,37 @@
                                     </div>
                                     <div x-show="!editingBilling">
                                         <p class="mb-1">{{ auth()->user()->name }}</p>
-                                        <p class="mb-1"></p>
-                                        <p class="mb-1"></p>
-                                        <p class="mb-1">Selangor</p>
-                                        <p class="mb-0">Malaysia</p>
+                                        <p class="mb-1" x-text="billing.address"></p>
+                                        <p class="mb-1" x-text="billing.city"></p>
+                                        <p class="mb-1" x-text="billing.state"></p>
+                                        <p class="mb-0" x-text="billing.postcode"></p>
                                     </div>
                                     <div x-show="editingBilling">
-                                        <div class="mb-3">
-                                            <label for="billing_name" class="form-label">Name</label>
-                                            <input type="text" class="form-control" id="billing_name" value="{{ auth()->user()->name }}">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="billing_country" class="form-label">Country *</label>
-                                            <input type="text" class="form-control" id="billing_country" value="Malaysia">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="billing_state" class="form-label">State *</label>
-                                            <input type="text" class="form-control" id="billing_state" value="Selangor">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="billing_street_address" class="form-label">Street Address *</label>
-                                            <input type="text" class="form-control" id="billing_street_address" value="a">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="billing_city" class="form-label">City *</label>
-                                            <input type="text" class="form-control" id="billing_city" value="a">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="billing_postcode" class="form-label">Postcode *</label>
-                                            <input type="text" class="form-control" id="billing_postcode" value="43000">
-                                        </div>
-                                        <div class="d-flex justify-content-between">
-                                            <button @click="editingBilling = false" type="button" class="btn btn-secondary">Cancel</button>
-                                            <button type="button" class="btn btn-primary">Save & Continue</button>
+                                        <div class="m-4">
+                                            <form id="billingForm" @submit.prevent="editingBilling = false; editingDelivery = true">
+                                                <div class="mb-3">
+                                                    <label for="billing_name" class="form-label">Name:</label>
+                                                    <input type="text" name="billing_name" id="billing_name" class="form-control read-only-grey" value="{{ auth()->user()->name }}" required readonly x-model="billing.name">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="billing_address" class="form-label">Address:</label>
+                                                    <input type="text" name="billing_address" id="billing_address" class="form-control" value="" required x-model="billing.address">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="billing_city" class="form-label">City:</label>
+                                                    <input type="text" name="billing_city" id="billing_city" class="form-control" value="" required x-model="billing.city">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="billing_state" class="form-label">State:</label>
+                                                    <input type="text" name="billing_state" id="billing_state" class="form-control" value="" required x-model="billing.state">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="billing_postcode" class="form-label">Postcode:</label>
+                                                    <input type="text" name="billing_postcode" id="billing_postcode" class="form-control" value="" placeholder="eg. 43000" required x-model="billing.postcode">
+                                                </div>
+                                                <hr><br>
+                                                <button type="submit" class="btn btn-primary w-100">Save & Continue</button>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
@@ -98,45 +96,43 @@
                                         </button>
                                     </div>
                                     <div x-show="!editingDelivery">
-                                        <p class="mb-1">{{ auth()->user()->name }}</p>
-                                        <p class="mb-1">{{ auth()->user()->phone }}</p>
-                                        <p class="mb-1"></p>
-                                        <p class="mb-1"></p>
-                                        <p class="mb-0"></p>
-                                        <p class="mb-0"></p>
+                                        <p class="mb-1" x-text="delivery.name"></p>
+                                        <p class="mb-1" x-text="delivery.phone"></p>
+                                        <p class="mb-1" x-text="delivery.street_address"></p>
+                                        <p class="mb-1" x-text="delivery.city"></p>
+                                        <p class="mb-0" x-text="delivery.postcode"></p>
+                                        <p class="mb-0" x-text="delivery.state"></p>
                                     </div>
                                     <div x-show="editingDelivery">
-                                        <div class="mb-3">
-                                            <label for="delivery_name" class="form-label">Name</label>
-                                            <input type="text" class="form-control" id="delivery_name" value="{{ auth()->user()->name }}">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="delivery_phone" class="form-label">Phone</label>
-                                            <input type="text" class="form-control" id="delivery_phone" value="{{ auth()->user()->phone }}">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="delivery_street_address" class="form-label">Street Address *</label>
-                                            <input type="text" class="form-control" id="delivery_street_address" value="a">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="delivery_city" class="form-label">City *</label>
-                                            <input type="text" class="form-control" id="delivery_city" value="a">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="delivery_postcode" class="form-label">Postcode *</label>
-                                            <input type="text" class="form-control" id="delivery_postcode" value="a">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="delivery_state" class="form-label">State *</label>
-                                            <input type="text" class="form-control" id="delivery_state" value="a">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="delivery_country" class="form-label">Country *</label>
-                                            <input type="text" class="form-control" id="delivery_country" value="a">
-                                        </div>
-                                        <div class="d-flex justify-content-between">
-                                            <button @click="editingDelivery = false" type="button" class="btn btn-secondary">Cancel</button>
-                                            <button type="button" class="btn btn-primary">Save & Continue</button>
+                                        <div class="m-4">
+                                            <form id="deliveryForm" @submit.prevent="editingDelivery = false">
+                                                <div class="mb-3">
+                                                    <label for="delivery_name" class="form-label">Name</label>
+                                                    <input type="text" class="form-control read-only-grey" id="delivery_name" value="{{ auth()->user()->name }}" required readonly x-model="delivery.name">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="delivery_phone" class="form-label">Phone</label>
+                                                    <input type="text" class="form-control" id="delivery_phone" value="{{ auth()->user()->phone }}" x-model="delivery.phone">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="delivery_street_address" class="form-label">Street Address *</label>
+                                                    <input type="text" class="form-control" id="delivery_street_address" value="" required x-model="delivery.street_address">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="delivery_city" class="form-label">City *</label>
+                                                    <input type="text" class="form-control" id="delivery_city" value="" required x-model="delivery.city">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="delivery_postcode" class="form-label">Postcode *</label>
+                                                    <input type="text" class="form-control" id="delivery_postcode" value="" required x-model="delivery.postcode">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="delivery_state" class="form-label">State *</label>
+                                                    <input type="text" class="form-control" id="delivery_state" value="" required x-model="delivery.state">
+                                                </div>
+                                                <hr><br>
+                                                <button type="submit" class="btn btn-primary w-100">Save & Continue</button>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
