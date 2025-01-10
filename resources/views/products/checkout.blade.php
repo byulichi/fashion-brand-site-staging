@@ -8,7 +8,7 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
+                <div class="p-6 text-gray-900" x-data="{ editingBilling: false, editingDelivery: false }">
                     <h3 class="font-bold mb-5 text-center">Quick Checkout</h2>
 
                     <div class="row mx-5 g-5">
@@ -22,9 +22,6 @@
                                             </div>
                                             <h2 class="fs-5 card-title mb-0">Contact Information</h2>
                                         </div>
-                                        <a href="#" class="text-primary">
-                                            <i class="fas fa-edit" style="color: #212529"></i>
-                                        </a>
                                     </div>
                                     <div>
                                         <p class="mb-1">{{ auth()->user()->name }}</p>
@@ -43,16 +40,46 @@
                                             </div>
                                             <h2 class="fs-5 card-title mb-0">Billing Address</h2>
                                         </div>
-                                        <a href="#" class="text-primary">
+                                        <button @click="editingBilling = !editingBilling" type="button" class="btn btn-link text-primary">
                                             <i class="fas fa-edit" style="color: #212529"></i>
-                                        </a>
+                                        </button>
                                     </div>
-                                    <div>
+                                    <div x-show="!editingBilling">
                                         <p class="mb-1">{{ auth()->user()->name }}</p>
-                                        <p class="mb-1">a</p>
-                                        <p class="mb-1">a</p>
+                                        <p class="mb-1"></p>
+                                        <p class="mb-1"></p>
                                         <p class="mb-1">Selangor</p>
                                         <p class="mb-0">Malaysia</p>
+                                    </div>
+                                    <div x-show="editingBilling">
+                                        <div class="mb-3">
+                                            <label for="billing_name" class="form-label">Name</label>
+                                            <input type="text" class="form-control" id="billing_name" value="{{ auth()->user()->name }}">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="billing_country" class="form-label">Country *</label>
+                                            <input type="text" class="form-control" id="billing_country" value="Malaysia">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="billing_state" class="form-label">State *</label>
+                                            <input type="text" class="form-control" id="billing_state" value="Selangor">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="billing_street_address" class="form-label">Street Address *</label>
+                                            <input type="text" class="form-control" id="billing_street_address" value="a">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="billing_city" class="form-label">City *</label>
+                                            <input type="text" class="form-control" id="billing_city" value="a">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="billing_postcode" class="form-label">Postcode *</label>
+                                            <input type="text" class="form-control" id="billing_postcode" value="43000">
+                                        </div>
+                                        <div class="d-flex justify-content-between">
+                                            <button @click="editingBilling = false" type="button" class="btn btn-secondary">Cancel</button>
+                                            <button type="button" class="btn btn-primary">Save & Continue</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -66,17 +93,51 @@
                                             </div>
                                             <h2 class="fs-5 card-title mb-0">Delivery Address</h2>
                                         </div>
-                                        <a href="#" class="text-primary">
+                                        <button @click="editingDelivery = !editingDelivery" type="button" class="btn btn-link text-primary">
                                             <i class="fas fa-edit" style="color: #212529"></i>
-                                        </a>
+                                        </button>
                                     </div>
-                                    <div>
+                                    <div x-show="!editingDelivery">
                                         <p class="mb-1">{{ auth()->user()->name }}</p>
                                         <p class="mb-1">{{ auth()->user()->phone }}</p>
-                                        <p class="mb-1">a</p>
-                                        <p class="mb-1">a</p>
-                                        <p class="mb-0">a</p>
-                                        <p class="mb-0">a</p>
+                                        <p class="mb-1"></p>
+                                        <p class="mb-1"></p>
+                                        <p class="mb-0"></p>
+                                        <p class="mb-0"></p>
+                                    </div>
+                                    <div x-show="editingDelivery">
+                                        <div class="mb-3">
+                                            <label for="delivery_name" class="form-label">Name</label>
+                                            <input type="text" class="form-control" id="delivery_name" value="{{ auth()->user()->name }}">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="delivery_phone" class="form-label">Phone</label>
+                                            <input type="text" class="form-control" id="delivery_phone" value="{{ auth()->user()->phone }}">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="delivery_street_address" class="form-label">Street Address *</label>
+                                            <input type="text" class="form-control" id="delivery_street_address" value="a">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="delivery_city" class="form-label">City *</label>
+                                            <input type="text" class="form-control" id="delivery_city" value="a">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="delivery_postcode" class="form-label">Postcode *</label>
+                                            <input type="text" class="form-control" id="delivery_postcode" value="a">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="delivery_state" class="form-label">State *</label>
+                                            <input type="text" class="form-control" id="delivery_state" value="a">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="delivery_country" class="form-label">Country *</label>
+                                            <input type="text" class="form-control" id="delivery_country" value="a">
+                                        </div>
+                                        <div class="d-flex justify-content-between">
+                                            <button @click="editingDelivery = false" type="button" class="btn btn-secondary">Cancel</button>
+                                            <button type="button" class="btn btn-primary">Save & Continue</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
