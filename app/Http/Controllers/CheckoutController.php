@@ -10,10 +10,11 @@ use App\Models\Order;
 use Stripe\Stripe;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\File;
 
 class CheckoutController extends Controller
 {
-    public function index ()
+    public function index()
     {
         $cartItems = Auth::check() ? Auth::user()->cart()->with('item')->get() : collect(session()->get('cart', []));
         $totalPrice = 0;
@@ -24,7 +25,9 @@ class CheckoutController extends Controller
             $totalPrice += $itemPrice * $quantity;
         }
 
-        return view('products.checkout', compact('cartItems', 'totalPrice'));
+        $states = json_decode(File::get(resource_path('data/malaysian_states.json')));
+
+        return view('products.checkout', compact('cartItems', 'totalPrice', 'states'));
     }
 
     // STRIPE
