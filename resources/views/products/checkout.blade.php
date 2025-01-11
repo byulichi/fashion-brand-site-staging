@@ -5,13 +5,24 @@
         </h2>
     </x-slot>
 
-    <div class="py-12">
+    <div class="">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900" x-data="{ editingBilling: true, editingDelivery: false, billing: { name: '{{ auth()->user()->name }}', address: '', city: '', state: '', postcode: '' }, delivery: { phone: '{{ auth()->user()->phone }}', street_address: '', city: '', postcode: '', state: '' } }">
+                <div class="p-6 text-gray-900" x-data="{
+                    editingBilling: true,
+                    editingDelivery: false,
+                    showDeliveryOptions: false, // Add a new variable to control visibility
+                    billing: { name: '{{ auth()->user()->name }}', address: '', city: '', state: '', postcode: '' },
+                    delivery: { phone: '', street_address: '', city: '', postcode: '', state: '' },
+                    deliveryMethod: 'shipping', // Default to shipping
+                    shippingPrices: {{ json_encode($shippingPrices) }}, // Pass shipping prices from backend
+                    shippingPrice: 0, // Initialize shipping price
+                }" x-init="// Set initial shipping price if a state is pre-selected
+                if (delivery.state) {
+                    shippingPrice = shippingPrices[delivery.state] || 0;
+                }">
                     <h3 class="font-bold mb-5 text-center">Quick Checkout</h2>
-
-                        <div class="row mx-5 g-5">
+                        <div class="row mx-5 g-5 mb-5">
                             <div class="col-lg-6 ps-5">
                                 <div class="card mb-3">
                                     <div class="card-body">
@@ -122,7 +133,7 @@
                                         </div>
                                         <div x-show="!editingDelivery">
                                             <p class="mb-1" x-text="delivery.name"></p>
-                                            <p class="mb-1" x-text="delivery.contact_number"></p>
+                                            <p class="mb-1" x-text="delivery.phone"></p>
                                             <p class="mb-1" x-text="delivery.street_address"></p>
                                             <p class="mb-1" x-text="delivery.city"></p>
                                             <p class="mb-0" x-text="delivery.postcode"></p>
@@ -130,43 +141,46 @@
                                         </div>
                                         <div x-show="editingDelivery">
                                             <div class="m-4">
-                                                <form id="deliveryForm" @submit.prevent="editingDelivery = false">
+                                                <form id="deliveryForm"
+                                                    @submit.prevent="editingDelivery = false; showDeliveryOptions = true">
                                                     <div class="mb-3">
-                                                        <label for="delivery_name" class="form-label">Name</label>
-                                                        <input type="text" class="form-control read-only-grey"
-                                                            id="delivery_name" value="" required
+                                                        <label for="delivery_name" class="form-label">Name:</label>
+                                                        <input type="text" class="form-control" id="delivery_name"
+                                                            value="{{ auth()->user()->name }}" required
                                                             x-model="delivery.name">
                                                     </div>
                                                     <div class="mb-3">
                                                         <label for="delivery_contact_number"
                                                             class="form-label">Contact Number</label>
                                                         <input type="text" class="form-control"
-                                                            id="delivery_contact_number" value="" required
-                                                            x-model="delivery.contact_number">
+                                                            id="delivery_contact_number"
+                                                            value="{{ auth()->user()->phone }}" required
+                                                            x-model="delivery.phone">
                                                     </div>
                                                     <div class="mb-3">
                                                         <label for="delivery_street_address" class="form-label">Street
-                                                            Address *</label>
+                                                            Address:</label>
                                                         <input type="text" class="form-control"
                                                             id="delivery_street_address" value="" required
                                                             x-model="delivery.street_address">
                                                     </div>
                                                     <div class="mb-3">
-                                                        <label for="delivery_city" class="form-label">City *</label>
+                                                        <label for="delivery_city" class="form-label">City:</label>
                                                         <input type="text" class="form-control" id="delivery_city"
                                                             value="" required x-model="delivery.city">
                                                     </div>
                                                     <div class="mb-3">
-                                                        <label for="delivery_postcode" class="form-label">Postcode
-                                                            *</label>
+                                                        <label for="delivery_postcode"
+                                                            class="form-label">Postcode:</label>
                                                         <input type="text" class="form-control"
                                                             id="delivery_postcode" value="" required
                                                             x-model="delivery.postcode">
                                                     </div>
                                                     <div class="mb-3">
-                                                        <label for="delivery_state" class="form-label">State *</label>
+                                                        <label for="delivery_state" class="form-label">State:</label>
                                                         <select class="form-control" id="delivery_state" required
-                                                            x-model="delivery.state">
+                                                            x-model="delivery.state"
+                                                            @change="shippingPrice = shippingPrices[delivery.state] || 0">
                                                             <option value="" disabled selected>Select State
                                                             </option>
                                                             @foreach ($states as $state)
@@ -184,20 +198,57 @@
                                     </div>
                                 </div>
 
-                                <div class="card">
+                                <div class="card" x-show="showDeliveryOptions">
                                     <div class="card-body">
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <label for="self-pickup" class="form-label fw-semibold mb-0">Self
-                                                Pickup</label>
-                                            <div class="d-flex align-items-center">
-                                                <span class="fw-semibold me-2">RM 0.00</span>
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                            <div>
                                                 <div class="form-check">
                                                     <input class="form-check-input" type="radio"
-                                                        name="delivery_method" id="self-pickup">
+                                                        name="delivery_method" id="self-pickup" value="pickup"
+                                                        x-model="deliveryMethod">
+                                                    <label class="form-check-label fw-semibold" for="self-pickup">Self
+                                                        Pickup</label>
                                                 </div>
+                                                <div {{-- x-show="deliveryMethod === 'pickup'" --}}>
+                                                    <p class="mb-1">House of Ariani KL</p>
+                                                    <p class="mb-1">260 Jalan Bunus, Jalan Palestin Off Jalan Masjid
+                                                        India,
+                                                        50100 Kuala Lumpur</p>
+                                                    <p class="text-muted">You will be notified via email when your
+                                                        order
+                                                        is ready for self-collection. Kindly wait for this notification
+                                                        before coming to collect your order.</p>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex align-items-center">
+                                                <span class="fw-semibold me-2">RM 0.00</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio"
+                                                        name="delivery_method" id="shipping" value="shipping"
+                                                        x-model="deliveryMethod">
+                                                    <label class="form-check-label fw-semibold"
+                                                        for="shipping">Shipping
+                                                        Provider</label>
+                                                </div>
+                                                <div x-show="deliveryMethod === 'shipping'">
+                                                    <p class="mb-0" x-text="delivery.state + ', Malaysia'"></p>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex align-items-center">
+                                                <span class="fw-semibold me-2"
+                                                    x-show="deliveryMethod === 'shipping'">RM <span
+                                                        x-text="shippingPrice.toFixed(2)"></span></span>
                                             </div>
                                         </div>
                                     </div>
+                                </div>
+                                <div class="mt-3">
+                                    <button type="button" class="btn btn-dark w-100">Continue</button>
                                 </div>
                             </div>
                             <div class="col-lg-6 pe-5">
@@ -253,9 +304,16 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
                 </div>
             </div>
         </div>
     </div>
+    </div>
 </x-app-layout>
+
+<style>
+    .read-only-grey {
+        background-color: #e9ecef;
+        opacity: 1;
+    }
+</style>
