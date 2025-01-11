@@ -11,16 +11,13 @@
                 <div class="p-6 text-gray-900" x-data="{
                     editingBilling: true,
                     editingDelivery: false,
-                    showDeliveryOptions: false, // Add a new variable to control visibility
+                    showDeliveryOptions: false,
                     billing: { name: '{{ auth()->user()->name }}', address: '', city: '', state: '', postcode: '' },
                     delivery: { phone: '', street_address: '', city: '', postcode: '', state: '' },
                     deliveryMethod: 'shipping', // Default to shipping
-                    shippingPrices: {{ json_encode($shippingPrices) }}, // Pass shipping prices from backend
-                    shippingPrice: 0, // Initialize shipping price
-                }" x-init="// Set initial shipping price if a state is pre-selected
-                if (delivery.state) {
-                    shippingPrice = shippingPrices[delivery.state] || 0;
-                }">
+                    shippingPrices: {{ json_encode($shippingPrices) }},
+                    shippingPrice: 0,
+                }" x-init="if (delivery.state) { shippingPrice = shippingPrices[delivery.state] || 0; }">
                     <h3 class="font-bold mb-5 text-center">Quick Checkout</h2>
                         <div class="row mx-5 g-5 mb-5">
                             <div class="col-lg-6 ps-5">
@@ -200,49 +197,56 @@
 
                                 <div class="card" x-show="showDeliveryOptions">
                                     <div class="card-body">
-                                        <div class="d-flex justify-content-between align-items-center mb-3">
-                                            <div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="radio"
-                                                        name="delivery_method" id="self-pickup" value="pickup"
-                                                        x-model="deliveryMethod">
-                                                    <label class="form-check-label fw-semibold" for="self-pickup">Self
-                                                        Pickup</label>
+                                        <div class="border p-3 mb-2 delivery-option"
+                                             @click="deliveryMethod = 'pickup'"
+                                             :class="{ 'bg-light': deliveryMethod === 'pickup' }">
+                                            <div class="d-flex justify-content-between align-items-start">
+                                                <div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio"
+                                                               name="delivery_method" id="self-pickup" value="pickup"
+                                                               x-model="deliveryMethod">
+                                                        <label class="form-check-label fw-semibold" for="self-pickup">Self
+                                                            Pickup</label>
+                                                    </div>
+                                                    <div>
+                                                        <p class="mb-1">House of Fashion Clothing Store KL</p>
+                                                        <p class="mb-1">260 Jalan Bunus, Jalan Palestin Off Jalan Masjid
+                                                            India,
+                                                            50100 Kuala Lumpur</p><br>
+                                                        <p class="text-muted" style="font-style: italic;">You will be notified via email when your
+                                                            order
+                                                            is ready for self-collection. Kindly wait for this notification
+                                                            before coming to collect your order.</p>
+                                                    </div>
                                                 </div>
-                                                <div {{-- x-show="deliveryMethod === 'pickup'" --}}>
-                                                    <p class="mb-1">House of Ariani KL</p>
-                                                    <p class="mb-1">260 Jalan Bunus, Jalan Palestin Off Jalan Masjid
-                                                        India,
-                                                        50100 Kuala Lumpur</p>
-                                                    <p class="text-muted">You will be notified via email when your
-                                                        order
-                                                        is ready for self-collection. Kindly wait for this notification
-                                                        before coming to collect your order.</p>
+                                                <div class="ms-2 flex-shrink-0">
+                                                    <span class="fw-semibold">RM 0.00</span>
                                                 </div>
-                                            </div>
-                                            <div class="d-flex align-items-center">
-                                                <span class="fw-semibold me-2">RM 0.00</span>
                                             </div>
                                         </div>
 
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="radio"
-                                                        name="delivery_method" id="shipping" value="shipping"
-                                                        x-model="deliveryMethod">
-                                                    <label class="form-check-label fw-semibold"
-                                                        for="shipping">Shipping
-                                                        Provider</label>
+                                        <div class="border p-3 delivery-option"
+                                             @click="deliveryMethod = 'shipping'"
+                                             :class="{ 'bg-light': deliveryMethod === 'shipping' }">
+                                            <div class="d-flex justify-content-between align-items-start">
+                                                <div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio"
+                                                               name="delivery_method" id="shipping" value="shipping"
+                                                               x-model="deliveryMethod">
+                                                        <label class="form-check-label fw-semibold"
+                                                               for="shipping">Shipping
+                                                            Provider</label>
+                                                    </div>
+                                                    <div>
+                                                        <p class="mb-0" x-text="delivery.state + ', Malaysia'"></p>
+                                                    </div>
                                                 </div>
-                                                <div x-show="deliveryMethod === 'shipping'">
-                                                    <p class="mb-0" x-text="delivery.state + ', Malaysia'"></p>
+                                                <div class="ms-2 flex-shrink-0">
+                                                    <span class="fw-semibold">RM <span
+                                                            x-text="shippingPrice.toFixed(2)"></span></span>
                                                 </div>
-                                            </div>
-                                            <div class="d-flex align-items-center">
-                                                <span class="fw-semibold me-2"
-                                                    x-show="deliveryMethod === 'shipping'">RM <span
-                                                        x-text="shippingPrice.toFixed(2)"></span></span>
                                             </div>
                                         </div>
                                     </div>
