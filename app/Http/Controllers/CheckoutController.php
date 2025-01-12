@@ -28,7 +28,7 @@ class CheckoutController extends Controller
         $states = json_decode(File::get(resource_path('data/malaysian_states.json')));
         $shippingPrices = json_decode(File::get(resource_path('data/shipping_prices.json')), true);
 
-        return view('products.checkout', compact('cartItems', 'totalPrice', 'states', 'shippingPrices'));
+        return view('products.checkout.checkout', compact('cartItems', 'totalPrice', 'states', 'shippingPrices'));
     }
     // STRIPE
     public function checkout(Request $request)
