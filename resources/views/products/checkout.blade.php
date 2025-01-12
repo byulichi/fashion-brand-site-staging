@@ -198,25 +198,29 @@
                                 <div class="card" x-show="showDeliveryOptions">
                                     <div class="card-body">
                                         <div class="border p-3 mb-2 delivery-option"
-                                             @click="deliveryMethod = 'pickup'"
-                                             :class="{ 'bg-light': deliveryMethod === 'pickup' }">
+                                            @click="deliveryMethod = 'pickup'"
+                                            :class="{ 'bg-light': deliveryMethod === 'pickup' }">
                                             <div class="d-flex justify-content-between align-items-start">
                                                 <div>
                                                     <div class="form-check">
                                                         <input class="form-check-input" type="radio"
-                                                               name="delivery_method" id="self-pickup" value="pickup"
-                                                               x-model="deliveryMethod">
-                                                        <label class="form-check-label fw-semibold" for="self-pickup">Self
+                                                            name="delivery_method" id="self-pickup" value="pickup"
+                                                            x-model="deliveryMethod">
+                                                        <label class="form-check-label fw-semibold"
+                                                            for="self-pickup">Self
                                                             Pickup</label>
                                                     </div>
                                                     <div>
                                                         <p class="mb-1">House of Fashion Clothing Store KL</p>
-                                                        <p class="mb-1">260 Jalan Bunus, Jalan Palestin Off Jalan Masjid
+                                                        <p class="mb-1">260 Jalan Bunus, Jalan Palestin Off Jalan
+                                                            Masjid
                                                             India,
                                                             50100 Kuala Lumpur</p><br>
-                                                        <p class="text-muted" style="font-style: italic;">You will be notified via email when your
+                                                        <p class="text-muted" style="font-style: italic;">You will be
+                                                            notified via email when your
                                                             order
-                                                            is ready for self-collection. Kindly wait for this notification
+                                                            is ready for self-collection. Kindly wait for this
+                                                            notification
                                                             before coming to collect your order.</p>
                                                     </div>
                                                 </div>
@@ -226,17 +230,16 @@
                                             </div>
                                         </div>
 
-                                        <div class="border p-3 delivery-option"
-                                             @click="deliveryMethod = 'shipping'"
-                                             :class="{ 'bg-light': deliveryMethod === 'shipping' }">
+                                        <div class="border p-3 delivery-option" @click="deliveryMethod = 'shipping'"
+                                            :class="{ 'bg-light': deliveryMethod === 'shipping' }">
                                             <div class="d-flex justify-content-between align-items-start">
                                                 <div>
                                                     <div class="form-check">
                                                         <input class="form-check-input" type="radio"
-                                                               name="delivery_method" id="shipping" value="shipping"
-                                                               x-model="deliveryMethod">
+                                                            name="delivery_method" id="shipping" value="shipping"
+                                                            x-model="deliveryMethod">
                                                         <label class="form-check-label fw-semibold"
-                                                               for="shipping">Shipping
+                                                            for="shipping">Shipping
                                                             Provider</label>
                                                     </div>
                                                     <div>
@@ -260,32 +263,39 @@
                                     <div class="card-body">
                                         <h2 class="fs-5 card-title mb-3">Cart Items</h2>
                                         @if ($cartItems->isNotEmpty())
-                                            @foreach ($cartItems as $item)
+                                            @foreach ($cartItems as $cartItem)
                                                 @php
-                                                    $product = is_array($item) ? (object) $item : $item->item;
-                                                    $quantity = is_array($item) ? $item['quantity'] : $item->quantity;
-                                                    $unitPrice = is_array($item) ? $item['price'] : $item->item->price;
+                                                    $product = is_array($cartItem)
+                                                        ? (object) $cartItem
+                                                        : $cartItem->item;
+                                                    $quantity = is_array($cartItem)
+                                                        ? $cartItem['quantity']
+                                                        : $cartItem->quantity;
+                                                    $unitPrice = is_array($cartItem)
+                                                        ? $cartItem['price']
+                                                        : $cartItem->item->price;
                                                 @endphp
                                                 <div class="d-flex align-items-center mb-3">
                                                     <div>
-                                                        @if ($product->image_url)
-                                                            <img src="{{ $product->image_url }}"
-                                                                alt="{{ $product->name }}" class="rounded"
-                                                                width="64" height="64"
-                                                                style="object-fit: cover;">
+                                                        @if (asset($cartItem->item->photo))
+                                                            <div class="bg-secondary d-flex align-items-center justify-content-center"
+                                                                width="64" height="86">
+                                                                <img src="{{ asset($cartItem->item->photo) }}"
+                                                                    alt="{{ $product->name }}" class=""
+                                                                    width="64" height="86"
+                                                                    style="object-fit: cover;">
+                                                            </div>
                                                         @else
                                                             <div class="bg-secondary rounded d-flex align-items-center justify-content-center"
-                                                                width="64" height="64">
+                                                                width="64" height="86">
                                                                 <span>No Image</span>
                                                             </div>
                                                         @endif
                                                     </div>
                                                     <div class="ms-3">
                                                         <h3 class="fs-6 fw-semibold mb-1">{{ $product->name }}</h3>
-                                                        <p class="text-muted mb-1 small">Color:
-                                                            {{ $product->color ?? 'N/A' }}</p>
                                                         <p class="text-muted mb-1 small">Qty: {{ $quantity }}</p>
-                                                        <p class="text-muted small">Unit Price: RM
+                                                        <p class="text-muted mb-1 small">Unit Price: RM
                                                             {{ number_format($unitPrice, 2) }}</p>
                                                     </div>
                                                     <div class="ms-auto fw-semibold">RM
