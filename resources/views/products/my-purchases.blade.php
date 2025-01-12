@@ -33,7 +33,7 @@
                         <div class="order-content">
                             @php
                                 $lineItems = json_decode($order->line_items, true);
-                                $shippingAddress = json_decode($order->shipping_address, true);
+                                $billingDetails = json_decode($order->billing_details, true); // Changed to billingDetails
                             @endphp
 
                             @if (!empty($lineItems))
@@ -52,19 +52,20 @@
                                             </div>
 
                                             <!-- Item Details -->
-                                            <div class="col-md-4 col-sm-12">
+                                            <div class="col-md-3 col-sm-12">
                                                 <h5 class="mb-1">{{ $product->name }}</h5>
                                                 <p class="text-muted">Variation: {{ $product->type->name ?? 'N/A' }}</p>
                                                 <p class="text-muted">x{{ $item['quantity'] }}</p>
                                             </div>
 
                                             <!-- Delivery Address -->
-                                            <div class="col-md-3 col-sm-12">
-                                                <h5 class="mb-1">Delivery Address:</h5>
-                                                {{ $shippingAddress['address'] ?? 'N/A' }}
-                                                {{ $shippingAddress['city'] ?? 'N/A' }},
-                                                {{ $shippingAddress['state'] ?? 'N/A' }}
-                                                {{ $shippingAddress['zip'] ?? 'N/A' }}
+                                            <div class="col-md-4 col-sm-12">
+                                                <h5 class="mb-1">Delivery To:</h5>
+                                                <p class="mb-0">{{ $order->delivery_name ?? 'N/A' }}</p>
+                                                <p class="mb-0">{{ $order->delivery_phone ?? 'N/A' }}</p>
+                                                <p class="mb-0">{{ $order->delivery_address ?? 'N/A' }}</p>
+                                                <p class="mb-0">{{ $order->delivery_city ?? 'N/A' }}, {{ $order->delivery_state ?? 'N/A' }} {{ $order->delivery_postcode ?? 'N/A' }}</p>
+                                                <p class="mb-0">Method: {{ ucfirst($order->delivery_method) ?? 'N/A' }}</p>
                                             </div>
 
                                             <!-- Item Price -->

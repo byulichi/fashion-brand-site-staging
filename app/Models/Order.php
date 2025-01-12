@@ -15,7 +15,14 @@ class Order extends Model
         'total_price',
         'session_id',
         'line_items',
-        'shipping_address',
+        'billing_details',
+        'delivery_name',
+        'delivery_phone',
+        'delivery_address',
+        'delivery_city',
+        'delivery_state',
+        'delivery_postcode',
+        'delivery_method',
     ];
 
     public function user()

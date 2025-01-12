@@ -104,10 +104,8 @@
                         </p>
                         @if (Auth::check())
                             <p class="card-text">You can choose your shipping option later in the checkout.</p>
-                            <form action="{{ route('checkout') }}" method="POST">
-                                @csrf
-                                <button type="button" class="btn btn-primary w-100 mb-2" data-bs-toggle="modal"
-                                    data-bs-target="#shippingModal">
+                            <form action="{{ route('checkout.index') }}" method="GET"> {{-- Changed the route and method --}}
+                                <button type="submit" class="btn btn-primary w-100 mb-2">
                                     CHECKOUT
                                 </button>
                             </form>
@@ -123,7 +121,7 @@
             </div>
         </div>
     </div>
-    @include('products.checkoutmodal')
+    {{-- @include('products.checkoutmodal') --}} {{-- Remove the include for the modal --}}
 </x-app-layout>
 <style>
     .quantity-selector {

@@ -33,20 +33,41 @@ class CheckoutController extends Controller
     // STRIPE
     public function checkout(Request $request)
     {
-        dd($request->all());
+        // dd($request->all());
+
         Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
 
+        // Validate billing information for Stripe (as needed by Stripe)
         $request->validate([
-            'address' => 'required|string|max:255',
-            'city' => 'required|string|max:255',
-            'state' => 'required|string|max:255',
-            'zip' => 'required|string|max:20',
+            'billing_name' => 'required|string|max:255',
+            'billing_address' => 'required|string|max:255',
+            'billing_city' => 'required|string|max:255',
+            'billing_state' => 'required|string|max:255',
+            'billing_postcode' => 'required|string|max:20',
+            'delivery_method' => 'required|string|in:pickup,shipping', // Validate delivery method
         ]);
-        $shippingAddress = [
-            'address' => $request->input('address'),
-            'city' => $request->input('city'),
-            'state' => $request->input('state'),
-            'zip' => $request->input('zip'),
+
+        // Extract billing information for Stripe
+        $billingDetails = [
+            'name' => $request->input('billing_name'),
+            'address' => [
+                'line1' => $request->input('billing_address'),
+                'city' => $request->input('billing_city'),
+                'state' => $request->input('billing_state'),
+                'postal_code' => $request->input('billing_postcode'),
+                'country' => 'MY', // Assuming store is primarily in Malaysia
+            ],
+        ];
+
+        // Extract delivery information for the order table
+        $deliveryDetails = [
+            'delivery_name' => $request->input('delivery_name'),
+            'delivery_phone' => $request->input('delivery_contact_number'),
+            'delivery_address' => $request->input('delivery_street_address'),
+            'delivery_city' => $request->input('delivery_city'),
+            'delivery_state' => $request->input('delivery_state'),
+            'delivery_postcode' => $request->input('delivery_postcode'),
+            'delivery_method' => $request->input('delivery_method'),
         ];
 
         $cartItems = Auth::check() ? Auth::user()->cart()->with('item')->get() : collect(session()->get('cart', []));
@@ -82,25 +103,30 @@ class CheckoutController extends Controller
             'mode' => 'payment',
             'success_url' => route('checkout.success', [], true) . '?session_id={CHECKOUT_SESSION_ID}',
             'cancel_url' => route('checkout.cancel', [], true),
+            'customer_creation' => 'if_required', // Create a customer if one doesn't exist
+            'shipping_address_collection' => [
+                'allowed_countries' => ['MY'], // Specify allowed shipping countries
+            ],
+            'billing_address_collection' => 'required', // Make billing address required
         ]);
 
         $existingOrder = Order::where('user_id', Auth::id())->where('status', 'unpaid')->first();
 
-        if ($existingOrder) {
-            $existingOrder->session_id = $session->id;
-            $existingOrder->total_price = $totalPrice / 100;
-            $existingOrder->line_items = json_encode($lineItemDetails);
-            $existingOrder->shipping_address = json_encode($shippingAddress);
-            $existingOrder->save();
-        } else {
-            Order::create([
+        $orderData =
+            [
                 'user_id' => Auth::id(),
                 'status' => 'unpaid',
                 'total_price' => $totalPrice / 100,
                 'session_id' => $session->id,
                 'line_items' => json_encode($lineItemDetails),
-                'shipping_address' => json_encode($shippingAddress),
-            ]);
+                'billing_details' => json_encode($billingDetails), // Store billing details
+            ] + $deliveryDetails; // Merge delivery details
+
+        if ($existingOrder) {
+            $existingOrder->fill($orderData);
+            $existingOrder->save();
+        } else {
+            Order::create($orderData);
         }
 
         return redirect($session->url);
