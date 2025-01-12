@@ -33,6 +33,7 @@ class CheckoutController extends Controller
     // STRIPE
     public function checkout(Request $request)
     {
+        dd($request->all());
         Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
 
         $request->validate([

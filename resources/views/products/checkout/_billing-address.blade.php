@@ -21,7 +21,7 @@
         </div>
         <div x-show="editingBilling">
             <div class="m-4">
-                <form id="billingForm" @submit.prevent="editingBilling = false; editingDelivery = true">
+                <form id="billingForm"> {{-- Remove the submit attribute --}}
                     <div class="mb-3">
                         <label for="billing_name" class="form-label">Name:</label>
                         <input type="text" name="billing_name" id="billing_name"
@@ -41,7 +41,7 @@
                     <div class="mb-3">
                         <label for="billing_state" class="form-label">State:</label>
                         <select name="billing_state" id="billing_state" class="form-control" required
-                            x-model="billing.state">
+                            x-model="billing.state" @change="if (billing.state) { shippingPrice = shippingPrices[billing.state] || 0; }">
                             <option value="" disabled selected>Select State
                             </option>
                             @foreach ($states as $state)
@@ -56,7 +56,7 @@
                             value="" placeholder="eg. 43000" required x-model="billing.postcode">
                     </div>
                     <hr><br>
-                    <button type="submit" class="btn btn-primary w-100">Save &
+                    <button type="button" class="btn btn-primary w-100" @click="editingBilling = false; editingDelivery = true">Save &
                         Continue</button>
                 </form>
             </div>

@@ -22,36 +22,37 @@
         </div>
         <div x-show="editingDelivery">
             <div class="m-4">
-                <form id="deliveryForm" @submit.prevent="editingDelivery = false; showDeliveryOptions = true">
                     <div class="mb-3">
                         <label for="delivery_name" class="form-label">Name:</label>
                         <input type="text" class="form-control" id="delivery_name"
+                            name="delivery_name"
                             value="{{ auth()->user()->name }}" required x-model="delivery.name">
                     </div>
                     <div class="mb-3">
                         <label for="delivery_contact_number" class="form-label">Contact Number</label>
                         <input type="text" class="form-control" id="delivery_contact_number"
+                            name="delivery_contact_number"
                             value="{{ auth()->user()->phone }}" required x-model="delivery.phone">
                     </div>
                     <div class="mb-3">
                         <label for="delivery_street_address" class="form-label">Street
                             Address:</label>
-                        <input type="text" class="form-control" id="delivery_street_address" value=""
+                        <input type="text" class="form-control" id="delivery_street_address" name="delivery_street_address" value=""
                             required x-model="delivery.street_address">
                     </div>
                     <div class="mb-3">
                         <label for="delivery_city" class="form-label">City:</label>
-                        <input type="text" class="form-control" id="delivery_city" value="" required
+                        <input type="text" class="form-control" id="delivery_city" name="delivery_city" value="" required
                             x-model="delivery.city">
                     </div>
                     <div class="mb-3">
                         <label for="delivery_postcode" class="form-label">Postcode:</label>
-                        <input type="text" class="form-control" id="delivery_postcode" value="" required
+                        <input type="text" class="form-control" id="delivery_postcode" name="delivery_postcode" value="" required
                             x-model="delivery.postcode">
                     </div>
                     <div class="mb-3">
                         <label for="delivery_state" class="form-label">State:</label>
-                        <select class="form-control" id="delivery_state" required x-model="delivery.state"
+                        <select class="form-control" id="delivery_state" name="delivery_state" required x-model="delivery.state"
                             @change="shippingPrice = shippingPrices[delivery.state] || 0">
                             <option value="" disabled selected>Select State
                             </option>
@@ -62,9 +63,8 @@
                         </select>
                     </div>
                     <hr><br>
-                    <button type="submit" class="btn btn-primary w-100">Save &
+                    <button type="button" class="btn btn-primary w-100" @click="editingDelivery = false; showDeliveryOptions = true">Save &
                         Continue</button>
-                </form>
             </div>
         </div>
     </div>
