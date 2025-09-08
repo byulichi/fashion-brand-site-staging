@@ -107,4 +107,30 @@ class CartController extends Controller
             ->route('cart', $request->only(['sort', 'type']))
             ->with('success', 'Item removed from cart.');
     }
+    public function addHardcoded(Request $request)
+    {
+        // Generate a stable ID if none was provided (based on name+photo)
+        $id = $request->id ?: ('hc_' . md5(($request->name ?? '') . '|' . ($request->photo ?? '')));
+
+        $product = [
+            'id'       => $id,
+            'name'     => $request->name,
+            'price'    => (float) $request->price,
+            'photo'    => $request->photo,
+            'quantity' => 1,
+        ];
+
+        // Always store hardcoded items in the SESSION cart (simplest & reliable)
+        $cart = session()->get('cart', []);
+        if (isset($cart[$id])) {
+            $cart[$id]['quantity']++;
+        } else {
+            $cart[$id] = $product;
+        }
+        session()->put('cart', $cart);
+
+        return redirect()->route('cart')->with('success', 'Product added to cart.');
+    }
+
+
 }

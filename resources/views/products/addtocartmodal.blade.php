@@ -1,4 +1,4 @@
-@if (Auth::check())
+@if (true)
     <div class="modal fade" id="productModal{{ $item->id }}" tabindex="-1"
         aria-labelledby="productModalLabel{{ $item->id }}" aria-hidden="true">
         <div class="modal-dialog">

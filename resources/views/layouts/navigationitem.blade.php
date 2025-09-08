@@ -1,4 +1,7 @@
 <ul class="navbar-nav mx-auto"> <!-- Centered Navigation -->
+    <li class="nav-item">
+    <a class="nav-link" href="{{ route('products') }}">All Products</a>
+    </li>
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle " href="#" id="newInDropdown" role="button"
             aria-expanded="false">
@@ -83,17 +86,6 @@
             <li><a class="dropdown-item" href="{{ route('products', ['type' => 'Leena Suit']) }}">Leena suit</a></li>
             <li><a class="dropdown-item" href="{{ route('products', ['type' => 'Tasneem Suit']) }}">Taneem suit</a>
             </li>
-        </ul>
-    </li>
-    <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle " href="#" id="bagsDropdown" role="button"
-            aria-expanded="false">
-            Bags
-        </a>
-        <ul class="dropdown-menu" aria-labelledby="bagsDropdown">
-            <li><a class="dropdown-item" href="#">Item 1</a></li>
-            <li><a class="dropdown-item" href="#">Item 2</a></li>
-            <li><a class="dropdown-item" href="#">Item 3</a></li>
         </ul>
     </li>
     <li class="nav-item dropdown">

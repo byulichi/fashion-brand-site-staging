@@ -21,9 +21,14 @@
                     <div class="order-container">
                         <div class="order-header">
                             <div class="d-flex justify-content-between align-items-center">
+                                @php
+                                    $label = $order->status === 'paid' ? 'Paid on' : 'Ordered on';
+                                    $time  = $order->status === 'paid' ? $order->updated_at : $order->created_at;
+                                @endphp
                                 <h5 class="mb-0">
-                                    Ordered on {{ $order->created_at->format('F j, Y \a\t h:i A') }}
+                                    {{ $label }} {{ optional($time)->timezone(config('app.timezone'))->format('F j, Y \a\t h:i A') }}
                                 </h5>
+
                                 <span class="order-status {{ $order->status == 'paid' ? 'bg-accent' : 'bg-warning' }}">
                                     {{ ucfirst($order->status) }}
                                 </span>

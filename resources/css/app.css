@@ -225,3 +225,24 @@ p {
 .btn-outline-primary:focus {
     box-shadow: 0 0 0 0.2rem rgba(159, 122, 234, 0.5);
 }
+
+.brand-logo {
+    max-height: 60px;      /* fits navbar height */
+    width: auto;
+    object-fit: contain;
+}
+
+/* Slightly smaller logo on tablets & phones */
+@media (max-width: 768px) {
+    .brand-logo {
+        max-height: 48px;
+    }
+}
+
+/* Even smaller for very small phones */
+@media (max-width: 480px) {
+    .brand-logo {
+        max-height: 40px;
+    }
+}
+

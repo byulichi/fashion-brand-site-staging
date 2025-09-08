@@ -3,9 +3,9 @@
     <?php session(['url.intended' => url()->full()]); ?>
     <div class="container-fluid my-2">
         <a class="navbar-brand" href="{{ url('/') }}">
-            <div style="height: 60px; width: auto;">
-            <img src="{{ asset('images/Logo/Welcome_page_logo.png') }}" style="height: 250%; width: auto; object-fit: contain; transform: translateX(0%) translateY(-28%);" alt="Brand Logo">
-            </div>
+            <img src="{{ asset('images/Logo/Welcome_page_logo.png') }}" 
+                alt="Brand Logo" 
+                class="brand-logo">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
