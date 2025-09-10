@@ -22,9 +22,23 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Keep your app timezone in config (safe everywhere)
         Config::set('app.timezone', env('APP_TIMEZONE', 'UTC'));
-        // Force MySQL/MariaDB session to Malaysia time (UTC+08:00)
-        DB::statement("SET time_zone = '+08:00'");
+
+        // Only touch the DB when NOT running in console (composer/artisan/build)
+        if (! app()->runningInConsole()) {
+            try {
+                // Only apply when using MySQL/MariaDB (skip sqlite, etc.)
+                if (DB::getDriverName() === 'mysql') {
+                    DB::statement("SET time_zone = '+08:00'");
+                }
+            } catch (\Throwable $e) {
+                // Optional: log if you want, but don't crash the app during boot
+                // \Log::warning('Failed to set session time_zone', ['error' => $e->getMessage()]);
+            }
+        }
+
+        // Force HTTPS in production (this is fine to keep)
         if (config('app.env') === 'production') {
             URL::forceScheme('https');
         }
